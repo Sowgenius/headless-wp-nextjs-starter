@@ -1,19 +1,21 @@
-import Header from '../src/components/layout/header';
+//import Header from '../src/components/layout/header';
+import Header from '../src/components/layout/Header';
 import Footer from '../src/components/layout/footer';
 import axios from 'axios';
 
-export default function Home(props) {
-	console.warn( 'props', props );
+export default function Home({data}) {
+	console.warn( 'data', data );
+	const { header, footer} = data.data;
 	return (
 		<div>
-			<Header/>
+			<Header header={header}/>
 			<main>
 				<h1>
 					Welcome to <a href="https://nextjs.org">Next.js!</a>
 				</h1>
 				<p className="text-green-500">Hello</p>
 			</main>
-			<Footer/>
+			<Footer footer={footer}/>
 		</div>
 	);
 }
