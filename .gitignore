@@ -35,7 +35,4 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Exclude component directory
-/src/components/*
-!/src/components/layout/
-!src/components/layout/
+
