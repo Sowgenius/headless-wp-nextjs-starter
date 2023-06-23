@@ -11,6 +11,6 @@ module.exports = {
     require( 'postcss-import' ),
     require( 'tailwindcss' ),
     require( 'precss' ),
-    require( 'autoprefixer' )
+    require( 'autoprefixer' ),
   ],
 }

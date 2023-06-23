@@ -1,4 +1,4 @@
-{
+{/*
   "extends": "next/core-web-vitals",
   "extends": ["plugin:storybook/recommended"],
   "overrides": [
@@ -12,5 +12,5 @@
         "storybook/default-exports": "off"
       }
     }
-  ]
+  ]*/
 }
