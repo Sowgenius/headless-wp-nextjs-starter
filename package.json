@@ -13,6 +13,7 @@
   "dependencies": {
     "@headlessui/react": "^1.7.2",
     "@heroicons/react": "^2.0.18",
+    "@svgr/cli": "^8.0.1",
     "axios": "^0.27.2",
     "dompurify": "^2.4.0",
     "lodash": "^4.17.21",
