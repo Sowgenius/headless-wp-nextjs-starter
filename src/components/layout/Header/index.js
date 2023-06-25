@@ -30,204 +30,141 @@ const Header = ({ header }) => {
       </Link>
     );
   });
-  const navigation = {
-    categories: [
-      {
-        name: "Women",
-        featured: [
-          { name: "Sleep", href: "#" },
-          { name: "Swimwear", href: "#" },
-          { name: "Underwear", href: "#" },
-        ],
-        collection: [
-          { name: "Everything", href: "#" },
-          { name: "Core", href: "#" },
-          { name: "New Arrivals", href: "#" },
-          { name: "Sale", href: "#" },
-        ],
-        categories: [
-          { name: "Basic Tees", href: "#" },
-          { name: "Artwork Tees", href: "#" },
-          { name: "Bottoms", href: "#" },
-          { name: "Underwear", href: "#" },
-          { name: "Accessories", href: "#" },
-        ],
-        brands: [
-          { name: "Full Nelson", href: "#" },
-          { name: "My Way", href: "#" },
-          { name: "Re-Arranged", href: "#" },
-          { name: "Counterfeit", href: "#" },
-          { name: "Significant Other", href: "#" },
-        ],
-      },
-      {
-        name: "Men",
-        featured: [
-          { name: "Casual", href: "#" },
-          { name: "Boxers", href: "#" },
-          { name: "Outdoor", href: "#" },
-        ],
-        collection: [
-          { name: "Everything", href: "#" },
-          { name: "Core", href: "#" },
-          { name: "New Arrivals", href: "#" },
-          { name: "Sale", href: "#" },
-        ],
-        categories: [
-          { name: "Artwork Tees", href: "#" },
-          { name: "Pants", href: "#" },
-          { name: "Accessories", href: "#" },
-          { name: "Boxers", href: "#" },
-          { name: "Basic Tees", href: "#" },
-        ],
-        brands: [
-          { name: "Significant Other", href: "#" },
-          { name: "My Way", href: "#" },
-          { name: "Counterfeit", href: "#" },
-          { name: "Re-Arranged", href: "#" },
-          { name: "Full Nelson", href: "#" },
-        ],
-      },
-    ],
-    pages: [
-      { name: "Company", href: "#" },
-      { name: "Stores", href: "#" },
-    ],
-  };
 
-  const currencies = ["CAD", "USD", "AUD", "EUR", "GBP"];
   const [open, setOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   return (
     <div className="bg-white">
       {/* Mobile menu */}
-      {
-        <Transition.Root show={mobileMenuOpen} as={Fragment}>
-          <Dialog
-            as="div"
-            className="relative z-40 lg:hidden"
-            onClose={setMobileMenuOpen}
+      <Transition.Root show={mobileMenuOpen} as={Fragment}>
+        <Dialog
+          as="div"
+          className="relative z-40 lg:hidden"
+          onClose={setMobileMenuOpen}
+        >
+          <Transition.Child
+            as={Fragment}
+            enter="transition-opacity ease-linear duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="transition-opacity ease-linear duration-300"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
           >
+            <div className="fixed inset-0 bg-black bg-opacity-25" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 z-40 flex">
             <Transition.Child
               as={Fragment}
-              enter="transition-opacity ease-linear duration-300"
-              enterFrom="opacity-0"
-              enterTo="opacity-100"
-              leave="transition-opacity ease-linear duration-300"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
+              enter="transition ease-in-out duration-300 transform"
+              enterFrom="-translate-x-full"
+              enterTo="translate-x-0"
+              leave="transition ease-in-out duration-300 transform"
+              leaveFrom="translate-x-0"
+              leaveTo="-translate-x-full"
             >
-              <div className="fixed inset-0 bg-black bg-opacity-25" />
-            </Transition.Child>
+              <Dialog.Panel className="relative flex w-full max-w-xs flex-col overflow-y-auto bg-white pb-12 shadow-xl">
+                <div className="flex px-4 pt-5 pb-2">
+                  <button
+                    type="button"
+                    className="-m-2 inline-flex items-center justify-center rounded-md p-2 text-gray-400"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <span className="sr-only">Fermer menu</span>
+                    <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+                  </button>
+                </div>
 
-            <div className="fixed inset-0 z-40 flex">
-              <Transition.Child
-                as={Fragment}
-                enter="transition ease-in-out duration-300 transform"
-                enterFrom="-translate-x-full"
-                enterTo="translate-x-0"
-                leave="transition ease-in-out duration-300 transform"
-                leaveFrom="translate-x-0"
-                leaveTo="-translate-x-full"
-              >
-                <Dialog.Panel className="relative flex w-full max-w-xs flex-col overflow-y-auto bg-white pb-12 shadow-xl">
-                  <div className="flex px-4 pt-5 pb-2">
-                    <button
-                      type="button"
-                      className="-m-2 inline-flex items-center justify-center rounded-md p-2 text-gray-400"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      <span className="sr-only">Fermer menu</span>
-                      <XMarkIcon className="h-6 w-6" aria-hidden="true" />
-                    </button>
-                  </div>
-
-                  {/* Links */}
-                  {!isEmpty(headerMenuItems) && headerMenuItems.length ? (
-                    <Tab.Group>
+                {/* Links */}
+                {!isEmpty(headerMenuItems) && headerMenuItems.length ? (
+                  <Tab.Group>
+                    {headerMenuItems.map((menuItem) => (
+                      <Fragment key={menuItem.id}>
+                        {menuItem.children && menuItem.children.length ? (
+                          <Tab
+                            key={menuItem.id}
+                            className="px-3 py-2 text-sm font-medium text-gray-900"
+                          >
+                            {menuItem.title}
+                          </Tab>
+                        ) : null}
+                      </Fragment>
+                    ))}
+                    <Tab.Panels>
                       {headerMenuItems.map((menuItem) => (
-                        <Fragment key={menuItem.id}>
+                        <Tab.Panel key={menuItem.id}>
                           {menuItem.children && menuItem.children.length ? (
-                            <Tab
-                              key={menuItem.id}
-                              className="px-3 py-2 text-sm font-medium text-gray-900"
+                            <ul
+                              role="list"
+                              className="space-y-6 border-t border-gray-200 py-6 px-4"
                             >
-                              {menuItem.title}
-                            </Tab>
+                              {menuItem.children.map((child) => (
+                                <li key={child.ID} className="flow-root">
+                                  {child.children && child.children.length ? (
+                                    <>
+                                      <MyLink
+                                        id={`mobile-${child.ID}-heading`}
+                                        className="font-medium text-gray-900"
+                                        href={child.url}
+                                        dangerouslySetInnerHTML={{
+                                          __html: child.title,
+                                        }}
+                                      ></MyLink>
+                                      <ul
+                                        role="list"
+                                        aria-labelledby={`mobile-${child.id}-heading`}
+                                        className="mt-6 space-y-6"
+                                      >
+                                        {child.children.map((grandChild) => (
+                                          <li
+                                            key={grandChild.id}
+                                            className="flex"
+                                          >
+                                            <MyLink
+                                              href={grandChild.url}
+                                              className="text-gray-500"
+                                              dangerouslySetInnerHTML={{
+                                                __html: grandChild.title,
+                                              }}
+                                            ></MyLink>
+                                          </li>
+                                        ))}
+                                      </ul>
+                                    </>
+                                  ) : null}
+                                </li>
+                              ))}
+                            </ul>
                           ) : null}
-                        </Fragment>
+                        </Tab.Panel>
                       ))}
-                      <Tab.Panels>
-                        {headerMenuItems.map((menuItem) => (
-                          <Tab.Panel key={menuItem.id}>
-                            {menuItem.children && menuItem.children.length ? (
-                              <ul
-                                role="list"
-                                className="space-y-6 border-t border-gray-200 py-6 px-4"
-                              >
-                                {menuItem.children.map((child) => (
-                                  <li key={child.id} className="flow-root">
-                                    {child.children && child.children.length ? (
-                                      <>
-                                        <p
-                                          id={`mobile-${child.id}-heading`}
-                                          className="font-medium text-gray-900"
-                                        >
-                                          {child.title}
-                                        </p>
-                                        <ul
-                                          role="list"
-                                          aria-labelledby={`mobile-${child.id}-heading`}
-                                          className="mt-6 space-y-6"
-                                        >
-                                          {child.children.map((grandChild) => (
-                                            <li
-                                              key={grandChild.id}
-                                              className="flex"
-                                            >
-                                              <a
-                                                href={grandChild.url}
-                                                className="text-gray-500"
-                                              >
-                                                {grandChild.title}
-                                              </a>
-                                            </li>
-                                          ))}
-                                        </ul>
-                                      </>
-                                    ) : null}
-                                  </li>
-                                ))}
-                              </ul>
-                            ) : null}
-                          </Tab.Panel>
-                        ))}
-                      </Tab.Panels>
-                    </Tab.Group>
-                  ) : null}
+                    </Tab.Panels>
+                  </Tab.Group>
+                ) : null}
 
-                  {headerMenuItems.map((menuItem) => (
-                    <Fragment key={menuItem.id}>
-                      {!(menuItem.children && menuItem.children.length) ? (
-                        <div className="space-y-6 border-t border-gray-200 py-6 px-4">
-                          <div className="flow-root">
-                            <MyLink
-                              href={menuItem.url}
-                              className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800"
-                            >
-                              {menuItem.title}
-                            </MyLink>
-                          </div>
+                {headerMenuItems.map((menuItem) => (
+                  <Fragment key={menuItem.id}>
+                    {!(menuItem.children && menuItem.children.length) ? (
+                      <div className="space-y-6 border-t border-gray-200 py-6 px-4">
+                        <div className="flow-root">
+                          <MyLink
+                            href={menuItem.url}
+                            className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800"
+                          >
+                            {menuItem.title}
+                          </MyLink>
                         </div>
-                      ) : null}
-                    </Fragment>
-                  ))}
-                </Dialog.Panel>
-              </Transition.Child>
-            </div>
-          </Dialog>
-        </Transition.Root>
-      }
+                      </div>
+                    ) : null}
+                  </Fragment>
+                ))}
+              </Dialog.Panel>
+            </Transition.Child>
+          </div>
+        </Dialog>
+      </Transition.Root>
+
       {/* Menu Desktop */}
       <header className="relative z-10">
         <nav aria-label="Top">
@@ -326,9 +263,10 @@ const Header = ({ header }) => {
                                       <MyLink
                                         href={menuItem.url}
                                         className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800"
-                                      >
-                                        {menuItem.title}
-                                      </MyLink>
+                                        dangerouslySetInnerHTML={{
+                                          __html: menuItem.title,
+                                        }}
+                                      ></MyLink>
                                     )}
 
                                     {menuItem.children &&
@@ -360,9 +298,11 @@ const Header = ({ header }) => {
                                                             href={items.url}
                                                             id={`desktop-featured-heading-${items.ID}`}
                                                             className="font-medium text-gray-900"
-                                                          >
-                                                            {items.title}
-                                                          </MyLink>
+                                                            dangerouslySetInnerHTML={{
+                                                              __html:
+                                                                items.title,
+                                                            }}
+                                                          ></MyLink>
                                                           {items.children &&
                                                             items.children
                                                               .length > 0 && (
@@ -384,11 +324,11 @@ const Header = ({ header }) => {
                                                                           item.url
                                                                         }
                                                                         className="hover:text-gray-800"
-                                                                      >
-                                                                        {
-                                                                          item.title
-                                                                        }
-                                                                      </MyLink>
+                                                                        dangerouslySetInnerHTML={{
+                                                                          __html:
+                                                                            item.title,
+                                                                        }}
+                                                                      ></MyLink>
                                                                     </li>
                                                                   )
                                                                 )}
@@ -440,7 +380,11 @@ const Header = ({ header }) => {
                   {/* Logo (lg-) */}
                   <a href="#" className="lg:hidden">
                     <span className="sr-only">Oumou Express</span>
-                    <img src={siteLogoUrl} alt="" className="h-8 w-auto" />
+                    <img
+                      src={siteLogoUrl}
+                      alt={siteTitle}
+                      className="h-8 w-auto"
+                    />
                   </a>
 
                   <div className="flex flex-1 items-center justify-end">
