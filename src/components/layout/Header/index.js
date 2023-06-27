@@ -80,10 +80,10 @@ const Header = ({ header }) => {
                 {!isEmpty(headerMenuItems) && headerMenuItems.length ? (
                   <Tab.Group>
                     {headerMenuItems.map((menuItem) => (
-                      <Fragment key={menuItem.id}>
+                      <Fragment key={menuItem.ID}>
                         {menuItem.children && menuItem.children.length ? (
                           <Tab
-                            key={menuItem.id}
+                            key={menuItem.ID}
                             className="px-3 py-2 text-sm font-medium text-gray-900"
                           >
                             {menuItem.title}
@@ -93,7 +93,7 @@ const Header = ({ header }) => {
                     ))}
                     <Tab.Panels>
                       {headerMenuItems.map((menuItem) => (
-                        <Tab.Panel key={menuItem.id}>
+                        <Tab.Panel key={menuItem.ID}>
                           {menuItem.children && menuItem.children.length ? (
                             <ul
                               role="list"
@@ -113,12 +113,12 @@ const Header = ({ header }) => {
                                       ></MyLink>
                                       <ul
                                         role="list"
-                                        aria-labelledby={`mobile-${child.id}-heading`}
+                                        aria-labelledby={`mobile-${child.ID}-heading`}
                                         className="mt-6 space-y-6"
                                       >
                                         {child.children.map((grandChild) => (
                                           <li
-                                            key={grandChild.id}
+                                            key={grandChild.ID}
                                             className="flex"
                                           >
                                             <MyLink
@@ -144,7 +144,7 @@ const Header = ({ header }) => {
                 ) : null}
 
                 {headerMenuItems.map((menuItem) => (
-                  <Fragment key={menuItem.id}>
+                  <Fragment key={menuItem.ID}>
                     {!(menuItem.children && menuItem.children.length) ? (
                       <div className="space-y-6 border-t border-gray-200 py-6 px-4">
                         <div className="flow-root">
@@ -226,14 +226,14 @@ const Header = ({ header }) => {
                 <div className="flex h-16 items-center justify-between">
                   {/* Logo (lg+) */}
                   <div className="hidden lg:flex lg:items-center">
-                    <a href="#">
+                    <MyLink href="/">
                       <span className="sr-only">{siteTitle}</span>
                       <img
                         className="h-8 w-auto"
                         src={siteLogoUrl}
                         alt="Logo"
                       />
-                    </a>
+                    </MyLink>
                   </div>
 
                   <div className="hidden h-full lg:flex">
@@ -242,7 +242,7 @@ const Header = ({ header }) => {
                       <div className="flex h-full justify-center space-x-8">
                         {!isEmpty(headerMenuItems) && headerMenuItems.length
                           ? headerMenuItems.map((menuItem) => (
-                              <Popover key={menuItem.title} className="flex">
+                              <Popover key={menuItem.ID} className="flex">
                                 {({ open }) => (
                                   <>
                                     {menuItem.children &&
@@ -378,14 +378,14 @@ const Header = ({ header }) => {
                   </div>
 
                   {/* Logo (lg-) */}
-                  <a href="#" className="lg:hidden">
+                  <MyLink href="/" className="lg:hidden">
                     <span className="sr-only">Oumou Express</span>
                     <img
                       src={siteLogoUrl}
                       alt={siteTitle}
                       className="h-8 w-auto"
                     />
-                  </a>
+                  </MyLink>
 
                   <div className="flex flex-1 items-center justify-end">
                     <div className="flex items-center lg:ml-8">
