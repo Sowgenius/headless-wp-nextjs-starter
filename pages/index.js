@@ -7,12 +7,12 @@ import {
   GET_PRODUCTS_ENDPOINT,
 } from "../src/utils/constants/endpoints";
 import Products from "../src/components/products";
+import { getProductsData } from "../src/utils/products";
 //import Products from "../src/components/products/index";
 
 export default function Home({ headerFooter, products }) {
   const { header, footer } = headerFooter || {};
   console.warn("headerfooter", headerFooter);
-  console.warn("products", products);
 
   return (
     <div>
@@ -30,14 +30,13 @@ export default function Home({ headerFooter, products }) {
 
 export async function getStaticProps() {
   const { data: headerFooterData } = await axios.get(HEADER_FOOTER_ENDPOINT);
-  const { data: products } = await axios.get(GET_PRODUCTS_ENDPOINT);
+  const { data: products } = await getProductsData();
 
-  const data = {
-    headerFooter: headerFooterData?.data ?? {},
-    products: products,
-  };
   return {
-    props: data || {},
+    props: {
+      headerFooter: headerFooterData?.data ?? {},
+      products: products ?? {},
+    },
     revalidate: 10,
   };
 }

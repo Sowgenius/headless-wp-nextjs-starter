@@ -1,4 +1,4 @@
-import { Fragment, useState, forwardRef } from "react";
+import { Fragment, useState, useEffect, forwardRef } from "react";
 import { Dialog, Popover, Tab, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
@@ -18,7 +18,11 @@ function classNames(...classes) {
 const Header = ({ header }) => {
   const { headerMenuItems, siteTitle, siteDescription, siteLogoUrl, favicon } =
     header || {};
-  console.warn("header", header);
+  const [isMounted, setMount] = useState(false);
+
+  useEffect(() => {
+    setMount(true);
+  }, []);
 
   const MyLink = forwardRef((props, ref) => {
     let { href, children, ...rest } = props;
@@ -77,70 +81,77 @@ const Header = ({ header }) => {
                 </div>
 
                 {/* Links */}
-                {!isEmpty(headerMenuItems) && headerMenuItems.length ? (
-                  <Tab.Group>
-                    {headerMenuItems.map((menuItem) => (
-                      <Fragment key={menuItem.ID}>
-                        {menuItem.children && menuItem.children.length ? (
-                          <Tab
-                            key={menuItem.ID}
-                            className="px-3 py-2 text-sm font-medium text-gray-900"
-                          >
-                            {menuItem.title}
-                          </Tab>
-                        ) : null}
-                      </Fragment>
-                    ))}
-                    <Tab.Panels>
-                      {headerMenuItems.map((menuItem) => (
-                        <Tab.Panel key={menuItem.ID}>
-                          {menuItem.children && menuItem.children.length ? (
-                            <ul
-                              role="list"
-                              className="space-y-6 border-t border-gray-200 py-6 px-4"
-                            >
-                              {menuItem.children.map((child) => (
-                                <li key={child.ID} className="flow-root">
-                                  {child.children && child.children.length ? (
-                                    <>
-                                      <MyLink
-                                        id={`mobile-${child.ID}-heading`}
-                                        className="font-medium text-gray-900"
-                                        href={child.url}
-                                        dangerouslySetInnerHTML={{
-                                          __html: child.title,
-                                        }}
-                                      ></MyLink>
-                                      <ul
-                                        role="list"
-                                        aria-labelledby={`mobile-${child.ID}-heading`}
-                                        className="mt-6 space-y-6"
-                                      >
-                                        {child.children.map((grandChild) => (
-                                          <li
-                                            key={grandChild.ID}
-                                            className="flex"
+                {isMounted ? (
+                  <>
+                    {!isEmpty(headerMenuItems) && headerMenuItems.length ? (
+                      <Tab.Group>
+                        {headerMenuItems.map((menuItem) => (
+                          <Fragment key={menuItem.ID}>
+                            {menuItem.children && menuItem.children.length ? (
+                              <Tab
+                                key={menuItem.ID}
+                                className="px-3 py-2 text-sm font-medium text-gray-900"
+                              >
+                                {menuItem.title}
+                              </Tab>
+                            ) : null}
+                          </Fragment>
+                        ))}
+                        <Tab.Panels>
+                          {headerMenuItems.map((menuItem) => (
+                            <Tab.Panel key={menuItem.ID}>
+                              {menuItem.children && menuItem.children.length ? (
+                                <ul
+                                  role="list"
+                                  className="space-y-6 border-t border-gray-200 py-6 px-4"
+                                >
+                                  {menuItem.children.map((child) => (
+                                    <li key={child.ID} className="flow-root">
+                                      {child.children &&
+                                      child.children.length ? (
+                                        <>
+                                          <MyLink
+                                            id={`mobile-${child.ID}-heading`}
+                                            className="font-medium text-gray-900"
+                                            href={child.url}
+                                            dangerouslySetInnerHTML={{
+                                              __html: child.title,
+                                            }}
+                                          ></MyLink>
+                                          <ul
+                                            role="list"
+                                            aria-labelledby={`mobile-${child.ID}-heading`}
+                                            className="mt-6 space-y-6"
                                           >
-                                            <MyLink
-                                              href={grandChild.url}
-                                              className="text-gray-500"
-                                              dangerouslySetInnerHTML={{
-                                                __html: grandChild.title,
-                                              }}
-                                            ></MyLink>
-                                          </li>
-                                        ))}
-                                      </ul>
-                                    </>
-                                  ) : null}
-                                </li>
-                              ))}
-                            </ul>
-                          ) : null}
-                        </Tab.Panel>
-                      ))}
-                    </Tab.Panels>
-                  </Tab.Group>
+                                            {child.children.map(
+                                              (grandChild) => (
+                                                <li
+                                                  key={grandChild.ID}
+                                                  className="flex"
+                                                >
+                                                  <MyLink
+                                                    href={grandChild.url}
+                                                    className="text-gray-500"
+                                                    dangerouslySetInnerHTML={{
+                                                      __html: grandChild.title,
+                                                    }}
+                                                  ></MyLink>
+                                                </li>
+                                              )
+                                            )}
+                                          </ul>
+                                        </>
+                                      ) : null}
+                                    </li>
+                                  ))}
+                                </ul>
+                              ) : null}
+                            </Tab.Panel>
+                          ))}
+                        </Tab.Panels>
+                      </Tab.Group>
+                    ) : null}
+                  </>
                 ) : null}
 
                 {headerMenuItems.map((menuItem) => (
@@ -235,123 +246,129 @@ const Header = ({ header }) => {
                       />
                     </MyLink>
                   </div>
+                  {isMounted ? (
+                    <>
+                      <div className="hidden h-full lg:flex">
+                        {/* Mega menus */}
+                        <Popover.Group className="ml-8">
+                          <div className="flex h-full justify-center space-x-8">
+                            {!isEmpty(headerMenuItems) && headerMenuItems.length
+                              ? headerMenuItems.map((menuItem) => (
+                                  <Popover key={menuItem.ID} className="flex">
+                                    {({ open }) => (
+                                      <>
+                                        {menuItem.children &&
+                                        menuItem.children.length > 0 ? (
+                                          <div className="relative flex">
+                                            <Popover.Button
+                                              className={classNames(
+                                                open
+                                                  ? "border-indigo-600 text-indigo-600"
+                                                  : "border-transparent text-gray-700 hover:text-gray-800",
+                                                "relative z-10 -mb-px flex items-center border-b-2 pt-px text-sm font-medium transition-colors duration-200 ease-out"
+                                              )}
+                                            >
+                                              {menuItem.title}
+                                            </Popover.Button>
+                                          </div>
+                                        ) : (
+                                          <MyLink
+                                            href={menuItem.url}
+                                            className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800"
+                                            dangerouslySetInnerHTML={{
+                                              __html: menuItem.title,
+                                            }}
+                                          ></MyLink>
+                                        )}
 
-                  <div className="hidden h-full lg:flex">
-                    {/* Mega menus */}
-                    <Popover.Group className="ml-8">
-                      <div className="flex h-full justify-center space-x-8">
-                        {!isEmpty(headerMenuItems) && headerMenuItems.length
-                          ? headerMenuItems.map((menuItem) => (
-                              <Popover key={menuItem.ID} className="flex">
-                                {({ open }) => (
-                                  <>
-                                    {menuItem.children &&
-                                    menuItem.children.length > 0 ? (
-                                      <div className="relative flex">
-                                        <Popover.Button
-                                          className={classNames(
-                                            open
-                                              ? "border-indigo-600 text-indigo-600"
-                                              : "border-transparent text-gray-700 hover:text-gray-800",
-                                            "relative z-10 -mb-px flex items-center border-b-2 pt-px text-sm font-medium transition-colors duration-200 ease-out"
-                                          )}
-                                        >
-                                          {menuItem.title}
-                                        </Popover.Button>
-                                      </div>
-                                    ) : (
-                                      <MyLink
-                                        href={menuItem.url}
-                                        className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800"
-                                        dangerouslySetInnerHTML={{
-                                          __html: menuItem.title,
-                                        }}
-                                      ></MyLink>
-                                    )}
+                                        {menuItem.children &&
+                                          menuItem.children.length > 0 && (
+                                            <Transition
+                                              as={Fragment}
+                                              enter="transition ease-out duration-200"
+                                              enterFrom="opacity-0"
+                                              enterTo="opacity-100"
+                                              leave="transition ease-in duration-150"
+                                              leaveFrom="opacity-100"
+                                              leaveTo="opacity-0"
+                                            >
+                                              <Popover.Panel className="absolute inset-x-0 top-full text-gray-500 sm:text-sm">
+                                                {/* Presentational element used to render the bottom shadow, if we put the shadow on the actual panel it pokes out the top, so we use this shorter element to hide the top of the shadow */}
+                                                <div
+                                                  className="absolute inset-0 top-1/2 bg-white shadow"
+                                                  aria-hidden="true"
+                                                />
 
-                                    {menuItem.children &&
-                                      menuItem.children.length > 0 && (
-                                        <Transition
-                                          as={Fragment}
-                                          enter="transition ease-out duration-200"
-                                          enterFrom="opacity-0"
-                                          enterTo="opacity-100"
-                                          leave="transition ease-in duration-150"
-                                          leaveFrom="opacity-100"
-                                          leaveTo="opacity-0"
-                                        >
-                                          <Popover.Panel className="absolute inset-x-0 top-full text-gray-500 sm:text-sm">
-                                            {/* Presentational element used to render the bottom shadow, if we put the shadow on the actual panel it pokes out the top, so we use this shorter element to hide the top of the shadow */}
-                                            <div
-                                              className="absolute inset-0 top-1/2 bg-white shadow"
-                                              aria-hidden="true"
-                                            />
-
-                                            <div className="relative bg-white">
-                                              <div className="mx-auto max-w-7xl px-8">
-                                                <div className="grid grid-cols-1 items-start gap-y-10 gap-x-8 pt-10 pb-12">
-                                                  <div className="grid grid-cols-4 gap-y-10 gap-x-8">
-                                                    {menuItem.children.map(
-                                                      (items) => (
-                                                        <div key={items.ID}>
-                                                          <MyLink
-                                                            href={items.url}
-                                                            id={`desktop-featured-heading-${items.ID}`}
-                                                            className="font-medium text-gray-900"
-                                                            dangerouslySetInnerHTML={{
-                                                              __html:
-                                                                items.title,
-                                                            }}
-                                                          ></MyLink>
-                                                          {items.children &&
-                                                            items.children
-                                                              .length > 0 && (
-                                                              <ul
-                                                                role="list"
-                                                                aria-labelledby={`desktop-featured-heading-${items.ID}`}
-                                                                className="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
-                                                              >
-                                                                {items.children.map(
-                                                                  (item) => (
-                                                                    <li
-                                                                      key={
-                                                                        item.ID
-                                                                      }
-                                                                      className="flex"
-                                                                    >
-                                                                      <MyLink
-                                                                        href={
-                                                                          item.url
-                                                                        }
-                                                                        className="hover:text-gray-800"
-                                                                        dangerouslySetInnerHTML={{
-                                                                          __html:
-                                                                            item.title,
-                                                                        }}
-                                                                      ></MyLink>
-                                                                    </li>
-                                                                  )
+                                                <div className="relative bg-white">
+                                                  <div className="mx-auto max-w-7xl px-8">
+                                                    <div className="grid grid-cols-1 items-start gap-y-10 gap-x-8 pt-10 pb-12">
+                                                      <div className="grid grid-cols-4 gap-y-10 gap-x-8">
+                                                        {menuItem.children.map(
+                                                          (items) => (
+                                                            <div key={items.ID}>
+                                                              <MyLink
+                                                                href={items.url}
+                                                                id={`desktop-featured-heading-${items.ID}`}
+                                                                className="font-medium text-gray-900"
+                                                                dangerouslySetInnerHTML={{
+                                                                  __html:
+                                                                    items.title,
+                                                                }}
+                                                              ></MyLink>
+                                                              {items.children &&
+                                                                items.children
+                                                                  .length >
+                                                                  0 && (
+                                                                  <ul
+                                                                    role="list"
+                                                                    aria-labelledby={`desktop-featured-heading-${items.ID}`}
+                                                                    className="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
+                                                                  >
+                                                                    {items.children.map(
+                                                                      (
+                                                                        item
+                                                                      ) => (
+                                                                        <li
+                                                                          key={
+                                                                            item.ID
+                                                                          }
+                                                                          className="flex"
+                                                                        >
+                                                                          <MyLink
+                                                                            href={
+                                                                              item.url
+                                                                            }
+                                                                            className="hover:text-gray-800"
+                                                                            dangerouslySetInnerHTML={{
+                                                                              __html:
+                                                                                item.title,
+                                                                            }}
+                                                                          ></MyLink>
+                                                                        </li>
+                                                                      )
+                                                                    )}
+                                                                  </ul>
                                                                 )}
-                                                              </ul>
-                                                            )}
-                                                        </div>
-                                                      )
-                                                    )}
+                                                            </div>
+                                                          )
+                                                        )}
+                                                      </div>
+                                                    </div>
                                                   </div>
                                                 </div>
-                                              </div>
-                                            </div>
-                                          </Popover.Panel>
-                                        </Transition>
-                                      )}
-                                  </>
-                                )}
-                              </Popover>
-                            ))
-                          : null}
+                                              </Popover.Panel>
+                                            </Transition>
+                                          )}
+                                      </>
+                                    )}
+                                  </Popover>
+                                ))
+                              : null}
+                          </div>
+                        </Popover.Group>
                       </div>
-                    </Popover.Group>
-                  </div>
+                    </>
+                  ) : null}
 
                   {/* Mobile menu and search (lg-) */}
                   <div className="flex flex-1 items-center lg:hidden">
