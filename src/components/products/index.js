@@ -1,5 +1,5 @@
 import { isEmpty, isArray } from "lodash";
-import Product from "./products";
+import Product from "./product";
 
 const Products = ({ products }) => {
   if (isEmpty(products) || !isArray(products)) {

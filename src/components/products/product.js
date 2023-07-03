@@ -3,7 +3,7 @@ import { isEmpty } from "lodash";
 import AddToCart from "../cart/add-to-cart";
 import Image from "../image";
 
-const product = ({ product }) => {
+const Product = ({ product }) => {
   if (isEmpty(product)) {
     return null;
   }
@@ -11,7 +11,7 @@ const product = ({ product }) => {
   const img = product?.images[0] ?? {};
   const productType = product?.type ?? "";
   return (
-    <div key={product?.id}>
+    <div>
       <div className="relative">
         <div className="relative h-72 w-full overflow-hidden rounded-lg">
           <Image
@@ -44,7 +44,7 @@ const product = ({ product }) => {
   );
 };
 
-export default product;
+export default Product;
 /*
 
 <div className="mt-6">

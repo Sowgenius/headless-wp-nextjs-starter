@@ -24,7 +24,7 @@ export const addToCart = (productId, qty = 1) => {
       addOrViewCartConfig
     )
     .then((res) => {
-      if (!isEmpty(storedSession)) {
+      if (isEmpty(storedSession)) {
         storeSession(res?.headers?.["x-wc-session"]);
       }
       viewCart();

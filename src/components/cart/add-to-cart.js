@@ -1,7 +1,6 @@
 import { isEmpty } from "lodash";
-import { addToCart } from "../../utils/cart";
 import axios from "axios";
-import ADD_TO_CART_ENDPOINT from "../../utils/constants/endpoints";
+import CART_ENDPOINT from "../../utils/constants/endpoints";
 
 const AddToCart = ({ product }) => {
   if (isEmpty(product)) {
@@ -11,7 +10,7 @@ const AddToCart = ({ product }) => {
   const addToCart = (productId, qty = 1) => {
     axios
       .post(
-        ADD_TO_CART_ENDPOINT,
+        CART_ENDPOINT,
         {
           product_id: productId,
           quantity: qty,
