@@ -1,6 +1,7 @@
 import { isEmpty } from "lodash";
 import axios from "axios";
-import CART_ENDPOINT from "../../utils/constants/endpoints";
+import { CART_ENDPOINT } from "../../utils/constants/endpoints";
+import { addToCart } from "../../utils/cart/index";
 
 const AddToCart = ({ product }) => {
   if (isEmpty(product)) {

@@ -1,8 +1,5 @@
 const WooCommerceRestApi = require("@woocommerce/woocommerce-rest-api").default;
 
-// Disable SSL certificate verification for development purpose
-//process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = "0";
-
 const api = new WooCommerceRestApi({
   url: process.env.NEXT_PUBLIC_WORDPRESS_SITE_URL,
   consumerKey: process.env.WC_CONSUMER_KEY,
