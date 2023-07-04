@@ -1,30 +1,20 @@
-//import Header from '../src/components/layout/header';
-import Header from "../src/components/layout/Header";
-import Footer from "../src/components/layout/myfooter";
 import axios from "axios";
-import {
-  HEADER_FOOTER_ENDPOINT,
-  GET_PRODUCTS_ENDPOINT,
-} from "../src/utils/constants/endpoints";
+import { HEADER_FOOTER_ENDPOINT } from "../src/utils/constants/endpoints";
+
+/*
+ * Internal Dependecies
+ */
 import Products from "../src/components/products";
 import { getProductsData } from "../src/utils/products";
-//import Products from "../src/components/products/index";
+import Layout from "../src/components/layout";
 
 export default function Home({ headerFooter, products }) {
-  const { header, footer } = headerFooter || {};
-  console.warn("headerfooter", headerFooter);
-
   return (
-    <div>
-      <Header header={header} />
+    <Layout headerFooter={headerFooter}>
       <main>
-        <h1>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-          <Products products={products} />
-        </h1>
+        <Products products={products} />
       </main>
-      <Footer footer={footer} />
-    </div>
+    </Layout>
   );
 }
 

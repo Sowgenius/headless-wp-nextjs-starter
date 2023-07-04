@@ -1,14 +1,28 @@
 import { isEmpty } from "lodash";
-import axios from "axios";
-import { CART_ENDPOINT } from "../../utils/constants/endpoints";
-import { addToCart } from "../../utils/cart/index";
+import { addToCart } from "../../utils/cart";
+import { useContext, useState } from "react";
+import { AppContext } from "../context";
+import cx from "classnames";
+import Link from "next/link";
 
 const AddToCart = ({ product }) => {
+  const [cart, setCart] = useContext(AppContext);
+  const [isAddedToCart, setIsAddedToCart] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const addToCartBtnClasses = cx(
+    "bg-gray-100 py-2 px-8 text-sm font-medium text-gray-900",
+    {
+      "bg-white hover:bg-gray-200": !loading,
+      "bg-gray-200": loading,
+    }
+  );
+
   if (isEmpty(product)) {
     return null;
   }
 
-  const addToCart = (productId, qty = 1) => {
+  /*const addToCart = (productId, qty = 1) => {
     axios
       .post(
         CART_ENDPOINT,
@@ -29,17 +43,27 @@ const AddToCart = ({ product }) => {
       .catch((err) => {
         console.log("err", err);
       });
-  };
+  };*/
 
   return (
     <div className="mt-6">
-      <button
-        onClick={() => addToCart(product?.id ?? 0)}
+      <div
+        onClick={() =>
+          addToCart(product?.id ?? 0, 1, setIsAddedToCart, setCart, setLoading)
+        }
+        disable={loading}
         className="relative flex items-center justify-center rounded-md border border-transparent bg-gray-100 py-2 px-8 text-sm font-medium text-gray-900 hover:bg-gray-200"
       >
-        Ajouter au panier
+        {loading ? "Ajout..." : "Ajouter au panier"}
         <span className="sr-only">, {product.name}</span>
-      </button>
+      </div>
+      {isAddedToCart && !loading ? (
+        <Link href="/panier">
+          <a className="relative flex items-center justify-center my-2 rounded-md border border-transparent bg-gray-100 py-2 px-8 text-sm font-medium text-gray-900 hover:bg-gray-200">
+            Voir panier
+          </a>
+        </Link>
+      ) : null}
     </div>
   );
 };

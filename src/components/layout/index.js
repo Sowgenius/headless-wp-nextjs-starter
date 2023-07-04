@@ -1,16 +1,19 @@
 //import { AppProvider } from '../context';
-import Header from "./Header";
-import Footer from "./myfooter";
+import Header from "./header";
+import Footer from "./footer";
+import { AppProvider } from "../context";
 
-const Layout = ({children}) => {
-	//const { header, footer } = headerFooter || {};
-	return (
-    <>
+const Layout = ({ children, headerFooter }) => {
+  const { header, footer } = headerFooter || {};
+  return (
+    <AppProvider>
       <div>
-        <Header />
+        <Header header={header} />
         <main className="container mx-auto py-4 min-h-50vh">{children}</main>
-        <Footer />
+        <Footer footer={footer} />
       </div>
-    </>
+    </AppProvider>
   );
-}
+};
+
+export default Layout;
