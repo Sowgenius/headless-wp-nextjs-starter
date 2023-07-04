@@ -1,6 +1,6 @@
 //import Header from '../src/components/layout/header';
 import Header from "../src/components/layout/Header";
-import Footer from "../src/components/layout/footer";
+import Footer from "../src/components/layout/myfooter";
 import axios from "axios";
 import {
   HEADER_FOOTER_ENDPOINT,
