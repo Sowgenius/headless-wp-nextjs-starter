@@ -1,32 +1,7 @@
 import { Fragment, useState, forwardRef } from "react";
 import { Dialog, Popover, Tab, Transition } from "@headlessui/react";
 import { sanitize } from "../../../utils/miscellaneous";
-const footerNavigation = {
-  products: [
-    { name: "Bags", href: "#" },
-    { name: "Tees", href: "#" },
-    { name: "Objects", href: "#" },
-    { name: "Home Goods", href: "#" },
-    { name: "Accessories", href: "#" },
-  ],
-  company: [
-    { name: "Who we are", href: "#" },
-    { name: "Sustainability", href: "#" },
-    { name: "Press", href: "#" },
-    { name: "Careers", href: "#" },
-    { name: "Terms & Conditions", href: "#" },
-    { name: "Privacy", href: "#" },
-  ],
-  customerService: [
-    { name: "Contact", href: "#" },
-    { name: "Shipping", href: "#" },
-    { name: "Returns", href: "#" },
-    { name: "Warranty", href: "#" },
-    { name: "Secure Payments", href: "#" },
-    { name: "FAQ", href: "#" },
-    { name: "Find a store", href: "#" },
-  ],
-};
+
 
 const Footer = ({ footer }) => {
   const {
@@ -153,7 +128,7 @@ const Footer = ({ footer }) => {
 
         <div className="border-t border-gray-100 py-10 text-center">
           <p className="text-sm text-gray-500">
-            &copy; 2021 Your Company, Inc. All rights reserved.
+            &copy; 2023 Oumou Express, Inc. All rights reserved.
           </p>
         </div>
       </div>
