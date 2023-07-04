@@ -5,6 +5,7 @@ const api = new WooCommerceRestApi({
   consumerKey: process.env.WC_CONSUMER_KEY,
   consumerSecret: process.env.WC_CONSUMER_SECRET,
   version: "wc/v3",
+  queryStringAuth: true,
 });
 
 /**
@@ -36,5 +37,8 @@ export default async function handler(req, res) {
   } catch (error) {
     responseData.error = error.message;
     res.status(500).json(responseData);
+    console.log("Response Status:", error.response.status);
+    console.log("Response Headers:", error.response.headers);
+    console.log("Response Data:", error.response.data);
   }
 }

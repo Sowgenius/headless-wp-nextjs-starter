@@ -5,6 +5,7 @@ const api = new WooCommerceRestApi({
   consumerKey: process.env.WC_CONSUMER_KEY,
   consumerSecret: process.env.WC_CONSUMER_SECRET,
   version: "wc/v3",
+  queryStringAuth: true,
 });
 
 /**
