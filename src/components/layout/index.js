@@ -1,6 +1,6 @@
 //import { AppProvider } from '../context';
 import Header from "./Header";
-import Footer from "./Footer";
+
 
 const Layout = ({children}) => {
 	//const { header, footer } = headerFooter || {};
