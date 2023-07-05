@@ -1,8 +1,8 @@
 import { getSession, storeSession } from "./session";
+import { getAddOrViewCartConfig } from "./api";
 import axios from "axios";
 import { CART_ENDPOINT } from "../constants/endpoints";
 import { isEmpty, isArray } from "lodash";
-import { getAddOrViewCartConfig } from "./api";
 
 /**
  * Add To Cart Request Handler.
@@ -49,11 +49,8 @@ export const addToCart = (
 
 /**
  * View Cart Request Handler
- *
- * @param {Function} setCart Set Cart Function.
- * @param {Function} setLoading Set Loading Function.
  */
-export const viewCart = (setCart, setLoading = () => {}) => {
+export const viewCart = (setCart) => {
   const addOrViewCartConfig = getAddOrViewCartConfig();
 
   axios
@@ -61,61 +58,9 @@ export const viewCart = (setCart, setLoading = () => {}) => {
     .then((res) => {
       const formattedCartData = getFormattedCartData(res?.data ?? []);
       setCart(formattedCartData);
-      setLoading(false);
     })
     .catch((err) => {
       console.log("err", err);
-    });
-};
-
-/**
- * Update Cart Request Handler
- */
-export const updateCart = (cartKey, qty = 1, setCart, setLoading) => {
-  const addOrViewCartConfig = getApiCartConfig();
-
-  setLoading(true);
-
-  axios
-    .put(
-      `${CART_ENDPOINT}${cartKey}`,
-      {
-        // product_id: productId,
-        quantity: qty,
-      },
-      addOrViewCartConfig
-    )
-    .then((res) => {
-      // const formattedCartData = getFormattedCartData( res?.data ?? [] );
-      // setCart( formattedCartData );
-      viewCart(setCart, setLoading);
-    })
-    .catch((err) => {
-      console.log("err", err);
-    });
-};
-
-/**
- * Clear Cart Request Handler
- *
- * @param {Function} setCart Set Cart
- * @param {Function} setClearCartProcessing Set Clear Cart Processing.
- */
-export const clearCart = (setCart, setClearCartProcessing) => {
-  setClearCartProcessing(true);
-
-  const addOrViewCartConfig = getApiCartConfig();
-
-  axios
-    .delete(CART_ENDPOINT, addOrViewCartConfig)
-    .then((res) => {
-      const formattedCartData = getFormattedCartData(res?.data ?? []);
-      setCart(formattedCartData);
-      setClearCartProcessing(false);
-    })
-    .catch((err) => {
-      console.log("err", err);
-      setClearCartProcessing(false);
     });
 };
 

@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect, forwardRef } from "react";
+import { Fragment, useState, useEffect, forwardRef, useContext } from "react";
 import { Dialog, Popover, Tab, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
@@ -10,12 +10,15 @@ import {
 } from "@heroicons/react/24/outline";
 import { isEmpty } from "lodash";
 import Link from "next/link";
+import { AppContext } from "../../context";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 const Header = ({ header }) => {
+  const [cart, setCart] = useContext(AppContext);
+
   const { headerMenuItems, siteTitle, siteDescription, siteLogoUrl, favicon } =
     header || {};
   const [isMounted, setMount] = useState(false);
@@ -182,32 +185,6 @@ const Header = ({ header }) => {
           {/* Top navigation */}
           <div className="bg-gray-900">
             <div className="mx-auto flex h-10 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-              {/* Currency selector */}
-              {/*<form className="hidden lg:block lg:flex-1">
-                <div className="flex">
-                  <label htmlFor="desktop-currency" className="sr-only">
-                    Currency
-                  </label>
-                  <div className="group relative -ml-2 rounded-md border-transparent bg-gray-900 focus-within:ring-2 focus-within:ring-white">
-                    <select
-                      id="desktop-currency"
-                      name="currency"
-                      className="flex items-center rounded-md border-transparent bg-gray-900 bg-none py-0.5 pl-2 pr-5 text-sm font-medium text-white focus:border-transparent focus:outline-none focus:ring-0 group-hover:text-gray-100"
-                    >
-                      {currencies.map((currency) => (
-                        <option key={currency}>{currency}</option>
-                      ))}
-                    </select>
-                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center">
-                      <ChevronDownIcon
-                        className="h-5 w-5 text-gray-300"
-                        aria-hidden="true"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </form>*/}
-
               <p className="flex-1 text-center text-sm font-medium text-white lg:flex-none">
                 {siteDescription}
               </p>
@@ -269,6 +246,14 @@ const Header = ({ header }) => {
                                               )}
                                             >
                                               {menuItem.title}
+                                              <ChevronDownIcon
+                                                className={classNames(
+                                                  open
+                                                    ? "rotate-180 transform"
+                                                    : "",
+                                                  "relative h-5 w-5 transition-colors duration-200 ease-out"
+                                                )}
+                                              />
                                             </Popover.Button>
                                           </div>
                                         ) : (
@@ -412,7 +397,7 @@ const Header = ({ header }) => {
                             href="#"
                             className="-m-2 p-2 text-gray-400 hover:text-gray-500"
                           >
-                            <span className="sr-only">Search</span>
+                            <span className="sr-only">Recherche</span>
                             <MagnifyingGlassIcon
                               className="h-6 w-6"
                               aria-hidden="true"
@@ -425,7 +410,7 @@ const Header = ({ header }) => {
                             href="#"
                             className="-m-2 p-2 text-gray-400 hover:text-gray-500"
                           >
-                            <span className="sr-only">Account</span>
+                            <span className="sr-only">Compte</span>
                             <UserIcon className="h-6 w-6" aria-hidden="true" />
                           </a>
                         </div>
@@ -437,7 +422,7 @@ const Header = ({ header }) => {
                       />
 
                       <div className="flow-root">
-                        <a
+                        <MyLink
                           href="#"
                           className="group -m-2 flex items-center p-2"
                         >
@@ -446,12 +431,12 @@ const Header = ({ header }) => {
                             aria-hidden="true"
                           />
                           <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
-                            0
+                            {cart?.totalQty ? `(${cart?.totalQty})` : 0}
                           </span>
                           <span className="sr-only">
-                            items in cart, view bag
+                            produits du panier, voir panier
                           </span>
-                        </a>
+                        </MyLink>
                       </div>
                     </div>
                   </div>
