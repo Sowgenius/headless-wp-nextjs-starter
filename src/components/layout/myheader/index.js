@@ -30,7 +30,7 @@ const Header = ({ header }) => {
   const MyLink = forwardRef((props, ref) => {
     let { href, children, ...rest } = props;
     return (
-      <Link href={href}>
+      <Link legacyBehavior href={href}>
         <a ref={ref} {...rest}>
           {children}
         </a>

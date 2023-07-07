@@ -8,9 +8,10 @@ module.exports = {
     extend: {},
   },
   plugins: [
-    require( 'postcss-import' ),
-    require( 'tailwindcss' ),
-    require( 'precss' ),
-    require( 'autoprefixer' ),
+    require("postcss-import"),
+    require("tailwindcss"),
+    require("precss"),
+    require("autoprefixer"),
+    require("@tailwindcss/forms"),
   ],
-}
+};

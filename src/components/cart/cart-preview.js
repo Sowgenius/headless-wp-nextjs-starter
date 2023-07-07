@@ -89,15 +89,19 @@ export default function Example() {
                 <div>
                   <div className="flex justify-between">
                     <h3 className="text-sm">
-                      <Link href={product.href}>
+                      <Link href={item?.data?.url}>
                         <a className="font-medium text-gray-700 hover:text-gray-800">
-                          {product.name}
+                          {item?.data?.name}
                         </a>
                       </Link>
                     </h3>
                   </div>
                   <div className="mt-1 flex text-sm">
-                    <p className="text-gray-500">{product.color}</p>
+                    {item?.data?.description ? (
+                      <p className="text-gray-500">{item?.data?.description}</p>
+                    ) : (
+                      ""
+                    )}
                     {product.size ? (
                       <p className="ml-4 border-l border-gray-200 pl-4 text-gray-500">
                         {product.size}
@@ -105,7 +109,8 @@ export default function Example() {
                     ) : null}
                   </div>
                   <p className="mt-1 text-sm font-medium text-gray-900">
-                    {product.price}
+                    {item?.currency}
+                    {item?.line_subtotal}
                   </p>
                 </div>
 
@@ -132,6 +137,9 @@ export default function Example() {
                     <button
                       type="button"
                       className="-m-2 inline-flex p-2 text-gray-400 hover:text-gray-500"
+                      onClick={(event) =>
+                        handleRemoveProductClick(event, item?.key)
+                      }
                     >
                       <span className="sr-only">Remove</span>
                       <XMarkIcon className="h-5 w-5" aria-hidden="true" />
