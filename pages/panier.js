@@ -1,13 +1,13 @@
 import axios from "axios";
 import Layout from "../src/components/layout";
 import { HEADER_FOOTER_ENDPOINT } from "../src/utils/constants/endpoints";
-import CartPreview from "../src/components/cart/cart-preview";
+//import CartPreview from "../src/components/cart/cart-preview";
+import CartItemsContainer from "../src/components/cart/cart-items-container";
 
 const Panier = ({ headerFooter }) => {
   return (
     <Layout headerFooter={headerFooter || {}}>
-      <h1>panier</h1>;
-      <CartPreview />
+      <CartItemsContainer />
     </Layout>
   );
 };

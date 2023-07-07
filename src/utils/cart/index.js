@@ -1,5 +1,5 @@
 import { getSession, storeSession } from "./session";
-import { getAddOrViewCartConfig } from "./api";
+import { getApiCartConfig } from "./api";
 import axios from "axios";
 import { CART_ENDPOINT } from "../constants/endpoints";
 import { isEmpty, isArray } from "lodash";
@@ -21,7 +21,7 @@ export const addToCart = (
   setLoading
 ) => {
   const storedSession = getSession();
-  const addOrViewCartConfig = getAddOrViewCartConfig();
+  const addOrViewCartConfig = getApiCartConfig();
 
   setLoading(true);
 
@@ -49,19 +49,97 @@ export const addToCart = (
 
 /**
  * View Cart Request Handler
+ *
+ * @param {Function} setCart Set Cart Function.
+ * @param {Function} setProcessing Set Processing Function.
  */
-export const viewCart = (setCart) => {
-  const addOrViewCartConfig = getAddOrViewCartConfig();
+export const viewCart = (setCart, setProcessing = () => {}) => {
+  const addOrViewCartConfig = getApiCartConfig();
 
   axios
     .get(CART_ENDPOINT, addOrViewCartConfig)
     .then((res) => {
       const formattedCartData = getFormattedCartData(res?.data ?? []);
       setCart(formattedCartData);
+      setProcessing(false);
     })
     .catch((err) => {
       console.log("err", err);
+      setProcessing(false);
     });
+};
+
+/**
+ * Update Cart Request Handler
+ */
+export const updateCart = (cartKey, qty = 1, setCart, setUpdatingProduct) => {
+  const addOrViewCartConfig = getApiCartConfig();
+
+  setUpdatingProduct(true);
+
+  axios
+    .put(
+      `${CART_ENDPOINT}${cartKey}`,
+      {
+        quantity: qty,
+      },
+      addOrViewCartConfig
+    )
+    .then((res) => {
+      viewCart(setCart, setUpdatingProduct);
+    })
+    .catch((err) => {
+      console.log("err", err);
+      setUpdatingProduct(false);
+    });
+};
+
+/**
+ * Delete a cart item Request handler.
+ *
+ * Deletes all products in the cart of a
+ * specific product id ( by its cart key )
+ * In a cart session, each product maintains
+ * its data( qty etc ) with a specific cart key
+ *
+ * @param {String} cartKey Cart Key.
+ * @param {Function} setCart SetCart Function.
+ * @param {Function} setRemovingProduct Set Removing Product Function.
+ */
+export const deleteCartItem = (cartKey, setCart, setRemovingProduct) => {
+  const addOrViewCartConfig = getApiCartConfig();
+
+  setRemovingProduct(true);
+
+  axios
+    .delete(`${CART_ENDPOINT}${cartKey}`, addOrViewCartConfig)
+    .then((res) => {
+      viewCart(setCart, setRemovingProduct);
+    })
+    .catch((err) => {
+      console.log("err", err);
+      setRemovingProduct(false);
+    });
+};
+
+/**
+ * Clear Cart Request Handler
+ *
+ * @param {Function} setCart Set Cart
+ * @param {Function} setClearCartProcessing Set Clear Cart Processing.
+ */
+export const clearCart = async (setCart, setClearCartProcessing) => {
+  setClearCartProcessing(true);
+
+  const addOrViewCartConfig = getApiCartConfig();
+
+  try {
+    const response = await axios.delete(CART_ENDPOINT, addOrViewCartConfig);
+    viewCart(setCart, setClearCartProcessing);
+  } catch (err) {
+    console.log("err", err);
+    setClearCartProcessing(false);
+  }
 };
 
 /**
