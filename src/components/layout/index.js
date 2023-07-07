@@ -1,5 +1,5 @@
 //import { AppProvider } from '../context';
-import Header from "./header";
+import Header from "./myheader";
 import Footer from "./footer";
 import { AppProvider } from "../context";
 
