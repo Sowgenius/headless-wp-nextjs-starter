@@ -19,7 +19,7 @@ export async function getStaticProps() {
     props: {
       headerFooter: headerFooterData?.data ?? {},
     },
-    revalidate: 1,
+    revalidate: 10,
   };
 }
 export default Panier;

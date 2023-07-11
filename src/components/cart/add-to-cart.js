@@ -66,12 +66,11 @@ const AddToCart = ({ product }) => {
         <span className="sr-only">, {product.name}</span>
       </div>
       {isAddedToCart && !loading ? (
-        <MyLink
-          href="/panier"
-          className="relative flex items-center justify-center my-2 rounded-md border border-transparent bg-gray-100 py-2 px-8 text-sm font-medium text-gray-900 hover:bg-gray-200"
-        >
-          Voir Panier
-        </MyLink>
+        <Link legacyBehavior href="/panier">
+          <a className="relative flex items-center justify-center my-2 rounded-md border border-transparent bg-gray-100 py-2 px-8 text-sm font-medium text-gray-900 hover:bg-gray-200">
+            Voir Panier
+          </a>
+        </Link>
       ) : null}
     </div>
   );

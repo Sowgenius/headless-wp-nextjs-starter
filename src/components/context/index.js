@@ -13,6 +13,7 @@ export const AppProvider = (props) => {
     if (process.browser) {
       let cartData = localStorage.getItem("next-cart");
       cartData = null !== cartData ? JSON.parse(cartData) : "";
+      console.log(cartData);
       setCart(cartData);
     }
   }, []);
@@ -27,6 +28,7 @@ export const AppProvider = (props) => {
   useEffect(() => {
     if (process.browser) {
       localStorage.setItem("next-cart", JSON.stringify(cart));
+      console.warn(cart);
     }
   }, [cart]);
 
