@@ -330,7 +330,7 @@ const CheckoutForm = ({ countriesData }) => {
                   type="checkbox"
                   checked={input?.billingDifferentThanShipping}
                   handleOnChange={handleOnChange}
-                  label="billing different shipping"
+                  label="Cochez ici si les informations de facturations diffèrent"
                   containerClassNames="mt-6 flex items-center mb-6"
                 />
 
@@ -344,7 +344,7 @@ const CheckoutForm = ({ countriesData }) => {
                     }
                     input={input?.billing}
                     handleOnChange={(event) =>
-                      handleOnChange(event, true, true)
+                      handleOnChange(event, false, true)
                     }
                     isFetchingStates={isFetchingBillingStates}
                     isShipping={false}

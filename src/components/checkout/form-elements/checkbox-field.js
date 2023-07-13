@@ -21,7 +21,7 @@ const CheckboxField = ({
       />
       <div className="ml-2">
         <label htmlFor={name} className="text-sm font-medium text-gray-900 ">
-          Cochez ici si les informations de facturations diffèrent
+          {label || ""}
         </label>
       </div>
     </div>
