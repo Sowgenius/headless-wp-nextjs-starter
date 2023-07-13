@@ -17,11 +17,11 @@ const CheckboxField = ({
         checked={checked}
         name={name}
         id={name}
-        className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+        className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 "
       />
       <div className="ml-2">
-        <label htmlFor={name} className="text-sm font-medium text-gray-900">
-          Pareil que les informations de livraison
+        <label htmlFor={name} className="text-sm font-medium text-gray-900 ">
+          Cochez ici si les informations de facturations diffèrent
         </label>
       </div>
     </div>

@@ -324,14 +324,14 @@ const CheckoutForm = ({ countriesData }) => {
                 Information de facturation
               </h2>
 
-              <div className="mt-6 flex items-center">
+              <div>
                 <CheckboxField
                   name="billingDifferentThanShipping"
                   type="checkbox"
                   checked={input?.billingDifferentThanShipping}
                   handleOnChange={handleOnChange}
                   label="billing different shipping"
-                  containerClassNames="mt-6 flex items-center"
+                  containerClassNames="mt-6 flex items-center mb-6"
                 />
 
                 {input?.billingDifferentThanShipping ? (
