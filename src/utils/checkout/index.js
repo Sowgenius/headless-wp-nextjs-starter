@@ -1,4 +1,31 @@
 /**
+ * Handle Billing Different Than Shipping.
+ *
+ * @param input
+ * @param setInput
+ * @param target
+ */
+export const handleBillingDifferentThanShipping = (input, setInput, target) => {
+  const newState = {
+    ...input,
+    [target.name]: !input.billingDifferentThanShipping,
+  };
+  setInput(newState);
+};
+
+/**
+ * Handle Create Account.
+ *
+ * @param input
+ * @param setInput
+ * @param target
+ */
+export const handleCreateAccount = (input, setInput, target) => {
+  const newState = { ...input, [target.name]: !input.createAccount };
+  setInput(newState);
+};
+
+/**
  * Set states for country
  * @param {Object} target Target
  * @param {Function} setTheStates

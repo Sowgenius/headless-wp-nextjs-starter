@@ -21,7 +21,7 @@ const CheckboxField = ({
       />
       <div className="ml-2">
         <label htmlFor={name} className="text-sm font-medium text-gray-900">
-          Same as shipping information
+          Pareil que les informations de livraison
         </label>
       </div>
     </div>

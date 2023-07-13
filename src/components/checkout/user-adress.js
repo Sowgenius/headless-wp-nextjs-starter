@@ -1,7 +1,7 @@
 import CountrySelection from "./country-selection";
 import InputField from "./form-elements/input-field";
 import PropTypes from "prop-types";
-import PhoneInput from "react-phone-number-input/input";
+import StateSelection from "./state-selection";
 
 const Address = ({
   input,
@@ -113,6 +113,16 @@ const Address = ({
       </div>
 
       <div className="sm:col-span-3">
+        <StateSelection
+          input={input}
+          handleOnChange={handleOnChange}
+          states={states}
+          isFetchingStates={isFetchingStates}
+          isShipping={isShipping}
+        />
+      </div>
+
+      <div className="sm:col-span-3">
         <InputField
           name="city"
           inputValue={input?.city}
@@ -124,7 +134,6 @@ const Address = ({
           containerClassnames="woo-inputField-checkout"
         />
       </div>
-
       <div className="sm:col-span-3">
         <InputField
           name="address1"

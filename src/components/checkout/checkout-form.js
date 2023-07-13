@@ -3,7 +3,12 @@ import { ChevronUpIcon, LockClosedIcon } from "@heroicons/react/24/outline";
 import { Fragment, useContext, useState } from "react";
 import { AppContext } from "../context";
 import Address from "./user-adress";
-import { setStatesForCountry } from "../../utils/checkout";
+import {
+  handleBillingDifferentThanShipping,
+  handleCreateAccount,
+  setStatesForCountry,
+} from "../../utils/checkout";
+import CheckboxField from "./form-elements/checkbox-field";
 
 const subtotal = "$108.00";
 const discount = { code: "CHEAPSKATE", amount: "$16.00" };
@@ -85,7 +90,7 @@ const CheckoutForm = ({ countriesData }) => {
   const [createOrderDate, setCreateOrderDate] = useState({});
 
   const handleFormSubmit = () => {};
-  const handleCreateAccount = () => {};
+
   const handleOnChange = async (
     event,
     isShipping = false,
@@ -308,60 +313,6 @@ const CheckoutForm = ({ countriesData }) => {
                   isFetchingStates={isFetchingShippingStates}
                   isShipping
                 />
-
-                {/* <div>
-                  <label
-                    htmlFor="city"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    City
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      type="text"
-                      id="city"
-                      name="city"
-                      autoComplete="address-level2"
-                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="region"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    State / Province
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      type="text"
-                      id="region"
-                      name="region"
-                      autoComplete="address-level1"
-                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="postal-code"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Postal code
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      type="text"
-                      id="postal-code"
-                      name="postal-code"
-                      autoComplete="postal-code"
-                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    />
-                  </div>
-                </div> */}
               </div>
             </section>
 
@@ -374,21 +325,31 @@ const CheckoutForm = ({ countriesData }) => {
               </h2>
 
               <div className="mt-6 flex items-center">
-                <input
-                  id="same-as-shipping"
-                  name="same-as-shipping"
+                <CheckboxField
+                  name="billingDifferentThanShipping"
                   type="checkbox"
-                  defaultChecked
-                  className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                  checked={input?.billingDifferentThanShipping}
+                  handleOnChange={handleOnChange}
+                  label="billing different shipping"
+                  containerClassNames="mt-6 flex items-center"
                 />
-                <div className="ml-2">
-                  <label
-                    htmlFor="same-as-shipping"
-                    className="text-sm font-medium text-gray-900"
-                  >
-                    Pareil que les informations de livraison
-                  </label>
-                </div>
+
+                {input?.billingDifferentThanShipping ? (
+                  <Address
+                    states={theBillingStates}
+                    countries={
+                      billingCountries.length
+                        ? billingCountries
+                        : shippingCountries
+                    }
+                    input={input?.billing}
+                    handleOnChange={(event) =>
+                      handleOnChange(event, true, true)
+                    }
+                    isFetchingStates={isFetchingBillingStates}
+                    isShipping={false}
+                  />
+                ) : null}
               </div>
             </section>
             <section aria-labelledby="payment-heading" className="mt-10">
