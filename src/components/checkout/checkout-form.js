@@ -1,24 +1,9 @@
-/*
-  This example requires Tailwind CSS v2.0+ 
-  
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
 import { Disclosure, Popover, Transition } from "@headlessui/react";
 import { ChevronUpIcon, LockClosedIcon } from "@heroicons/react/24/outline";
 import { Fragment, useContext, useState } from "react";
 import { AppContext } from "../context";
 import Address from "./user-adress";
+import { setStatesForCountry } from "../../utils/checkout";
 
 const subtotal = "$108.00";
 const discount = { code: "CHEAPSKATE", amount: "$16.00" };
@@ -72,9 +57,10 @@ const defaultCustomerInfo = {
 };
 
 const CheckoutForm = ({ countriesData }) => {
-  console.log("countriesData", countriesData);
+  //console.log("countriesData", countriesData);
 
-  const [billingCountries, shippingCountries] = [countriesData] || {};
+  const { billingCountries, shippingCountries } = countriesData || {};
+  console.log("NewData", [billingCountries, shippingCountries]);
   const initialState = {
     billing: {
       ...defaultCustomerInfo,
@@ -99,7 +85,60 @@ const CheckoutForm = ({ countriesData }) => {
   const [createOrderDate, setCreateOrderDate] = useState({});
 
   const handleFormSubmit = () => {};
-  const handleOnChange = (event, isShipping = false, isBilling = false) => {};
+  const handleCreateAccount = () => {};
+  const handleOnChange = async (
+    event,
+    isShipping = false,
+    isBillingOrShipping = false
+  ) => {
+    const { target } = event || {};
+    console.log("target", target);
+    console.log("event", event);
+    if ("createAccount" === target.name) {
+      handleCreateAccount(input, setInput, target);
+    } else if ("billingDifferentThanShipping" === target.name) {
+      handleBillingDifferentThanShipping(input, setInput, target);
+    } else if (isBillingOrShipping) {
+      if (isShipping) {
+        //handle Shipping
+        await handleShippingChange(target);
+      } else {
+        //handle Billing
+        await handleBillingChange(target);
+      }
+    } else {
+      const newState = { ...input, [target.name]: target.value };
+      setInput(newState);
+    }
+
+    console.log("input", input);
+  };
+
+  const handleShippingChange = async (target) => {
+    const newState = {
+      ...input,
+      shipping: { ...input?.shipping, [target.name]: target.value },
+    };
+    setInput(newState);
+    await setStatesForCountry(
+      target,
+      setTheShippingStates,
+      setIsFetchingShippingStates
+    );
+  };
+
+  const handleBillingChange = async (target) => {
+    const newState = {
+      ...input,
+      billing: { ...input?.billing, [target.name]: target.value },
+    };
+    setInput(newState);
+    await setStatesForCountry(
+      target,
+      setTheBillingStates,
+      setIsFetchingBillingStates
+    );
+  };
 
   return (
     <div className="bg-white">
@@ -250,24 +289,6 @@ const CheckoutForm = ({ countriesData }) => {
               >
                 Information de contact
               </h2>
-
-              <div className="mt-6">
-                <label
-                  htmlFor="email-address"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Email address
-                </label>
-                <div className="mt-1">
-                  <input
-                    type="email"
-                    id="email-address"
-                    name="email-address"
-                    autoComplete="email"
-                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                  />
-                </div>
-              </div>
             </section>
 
             <section aria-labelledby="shipping-heading" className="mt-10">
@@ -275,27 +296,10 @@ const CheckoutForm = ({ countriesData }) => {
                 id="shipping-heading"
                 className="text-lg font-medium text-gray-900"
               >
-                Shipping address
+                Addresse de livraison
               </h2>
 
               <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-3">
-                <div className="sm:col-span-3">
-                  <label
-                    htmlFor="company"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Company
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      type="text"
-                      id="company"
-                      name="company"
-                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    />
-                  </div>
-                </div>
-
                 <Address
                   states={theShippingStates}
                   countries={shippingCountries}
@@ -305,24 +309,7 @@ const CheckoutForm = ({ countriesData }) => {
                   isShipping
                 />
 
-                <div className="sm:col-span-3">
-                  <label
-                    htmlFor="apartment"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Apartment, suite, etc.
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      type="text"
-                      id="apartment"
-                      name="apartment"
-                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    />
-                  </div>
-                </div>
-
-                <div>
+                {/* <div>
                   <label
                     htmlFor="city"
                     className="block text-sm font-medium text-gray-700"
@@ -374,7 +361,7 @@ const CheckoutForm = ({ countriesData }) => {
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
                   </div>
-                </div>
+                </div> */}
               </div>
             </section>
 
@@ -383,7 +370,7 @@ const CheckoutForm = ({ countriesData }) => {
                 id="billing-heading"
                 className="text-lg font-medium text-gray-900"
               >
-                Billing information
+                Information de facturation
               </h2>
 
               <div className="mt-6 flex items-center">
@@ -399,7 +386,7 @@ const CheckoutForm = ({ countriesData }) => {
                     htmlFor="same-as-shipping"
                     className="text-sm font-medium text-gray-900"
                   >
-                    Same as shipping information
+                    Pareil que les informations de livraison
                   </label>
                 </div>
               </div>
@@ -495,7 +482,7 @@ const CheckoutForm = ({ countriesData }) => {
                 Continue
               </button>
               <p className="mt-4 text-center text-sm text-gray-500 sm:mt-0 sm:text-left">
-                You won't be charged until the next step.
+                Vous ne seres facturez qu'à l'étape suivante.
               </p>
             </div>
           </div>

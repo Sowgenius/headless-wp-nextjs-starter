@@ -1,5 +1,8 @@
+import CountrySelection from "./country-selection";
 import InputField from "./form-elements/input-field";
 import PropTypes from "prop-types";
+import PhoneInput from "react-phone-number-input/input";
+
 const Address = ({
   input,
   countries,
@@ -25,6 +28,7 @@ const Address = ({
               isShipping={isShipping}
               autoComplete="given-name"
               containerClassnames="woo-inputField-checkout"
+              placeholder="Samba"
             />
           </div>
           <div>
@@ -38,6 +42,7 @@ const Address = ({
               isShipping={isShipping}
               autoComplete="family-name"
               containerClassnames="woo-inputField-checkout"
+              placeholder="Cissé"
             />
           </div>
         </div>
@@ -54,21 +59,79 @@ const Address = ({
           containerClassnames="woo-inputField-checkout"
         />
       </div>
-      {/*
-        <CountrySelection
-            input={input}
-            handleOnChange={handleOnChange}
-            countries={countries}
-            isShipping={isShipping}
+      <div className="sm:col-span-3">
+        <InputField
+          name="email"
+          inputValue={input?.email}
+          handleOnChange={handleOnChange}
+          required
+          label="Email"
+          errors={errors}
+          isShipping={isShipping}
+          autoComplete="email"
+          containerClassnames="woo-inputField-checkout"
+          placeholder="sambacisse@oumouexpress.com "
         />
-        */}
+      </div>
+      <div className="sm:col-span-3">
+        {/* <PhoneInput
+          country="SN"
+          international
+          withCountryCallingCode
+          name="phone"
+          value={input?.phone}
+          //inputValue={input?.phone}
+          onChange={handleOnChange}
+          //handleOnChange={handleOnChange}
+          label="Téléphone"
+          errors={errors}
+          isShipping={isShipping}
+          autoComplete="tel"
+          containerClassnames="woo-inputField-checkout"
+          //inputComponent={InputField}
+        /> */}
+        <InputField
+          name="phone"
+          inputValue={input?.phone}
+          handleOnChange={handleOnChange}
+          required
+          label="Téléphone"
+          errors={errors}
+          isShipping={isShipping}
+          autoComplete="phone"
+          containerClassnames="woo-inputField-checkout"
+          placeholder="+221 77 576 87 98"
+        />
+      </div>
+      <div className="sm:col-span-3">
+        <CountrySelection
+          input={input}
+          handleOnChange={handleOnChange}
+          countries={countries}
+          isShipping={isShipping}
+        />
+      </div>
+
+      <div className="sm:col-span-3">
+        <InputField
+          name="city"
+          inputValue={input?.city}
+          required
+          handleOnChange={handleOnChange}
+          label="Region/Ville"
+          errors={errors}
+          isShipping={isShipping}
+          containerClassnames="woo-inputField-checkout"
+        />
+      </div>
+
       <div className="sm:col-span-3">
         <InputField
           name="address1"
           inputValue={input?.address1}
           handleOnChange={handleOnChange}
           required
-          label="Adresse de livraison"
+          label="Adresse"
           errors={errors}
           isShipping={isShipping}
           autoComplete="adress-line1"
@@ -81,24 +144,25 @@ const Address = ({
           name="address2"
           inputValue={input?.address2}
           handleOnChange={handleOnChange}
-          label="N* Appartement, etages, etc... "
+          label="Complément d'addresse "
           errors={errors}
           isShipping={isShipping}
           autoComplete="adress-line2"
           containerClassnames="woo-inputField-checkout"
-          placeholder="Appartement 10, 2e étages..."
+          placeholder="Appart. 10, 2e étages..."
         />
       </div>
       <div className="sm:col-span-3">
         <InputField
-          name="city"
-          inputValue={input?.city}
-          required
+          name="postcode"
+          inputValue={input?.postcode}
           handleOnChange={handleOnChange}
-          label="Region/Ville"
+          label="Code Postal "
           errors={errors}
           isShipping={isShipping}
+          autoComplete="postcode"
           containerClassnames="woo-inputField-checkout"
+          placeholder="Code Postal"
         />
       </div>
     </>

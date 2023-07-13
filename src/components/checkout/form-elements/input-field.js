@@ -1,4 +1,4 @@
-import Error from "./errors";
+import Error from "./error";
 import Abbr from "./abbr";
 import PropTypes from "prop-types";
 const InputField = ({
