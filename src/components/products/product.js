@@ -2,6 +2,7 @@ import { sanitize } from "../../utils/miscellaneous";
 import { isEmpty } from "lodash";
 import AddToCart from "../cart/add-to-cart";
 import Image from "../image";
+//import Link from "next/link";
 
 const Product = ({ product }) => {
   if (isEmpty(product)) {
@@ -40,6 +41,15 @@ const Product = ({ product }) => {
         </div>
       </div>
       {"simple" === productType ? <AddToCart product={product} /> : null}
+      {/* "variable" === productType ? (
+        <div>
+          <Link legacyBehavior href={`/products/${product.slug}`}>
+            <a className="relative flex items-center justify-center rounded-md border border-transparent bg-gray-100 py-2 px-8 text-sm font-medium text-gray-900 hover:bg-gray-200">
+              Voir Produit
+            </a>
+          </Link>
+        </div>
+      ) : null */}
     </div>
   );
 };

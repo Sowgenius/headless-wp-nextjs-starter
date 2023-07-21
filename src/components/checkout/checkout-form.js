@@ -1,5 +1,5 @@
-import { Disclosure, Popover, Transition } from "@headlessui/react";
-import { ChevronUpIcon, LockClosedIcon } from "@heroicons/react/24/outline";
+//import { Disclosure, Popover, Transition } from "@headlessui/react";
+//import { ChevronUpIcon, LockClosedIcon } from "@heroicons/react/24/outline";
 import { Fragment, useContext, useState } from "react";
 import { AppContext } from "../context";
 import Address from "./user-adress";
@@ -9,27 +9,8 @@ import {
   setStatesForCountry,
 } from "../../utils/checkout";
 import CheckboxField from "./form-elements/checkbox-field";
-
-const subtotal = "$108.00";
-const discount = { code: "CHEAPSKATE", amount: "$16.00" };
-const taxes = "$9.92";
-const shipping = "$8.00";
-const total = "$141.92";
-const products = [
-  {
-    id: 1,
-    name: "Mountain Mist Artwork Tee",
-    href: "#",
-    price: "$36.00",
-    color: "Birch",
-    size: "L",
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/checkout-form-04-product-01.jpg",
-    imageAlt:
-      "Off-white t-shirt with circular dot illustration on the front of mountain ridges that fade.",
-  },
-  // More products...
-];
+import YourOrder from "./your-order";
+//import PaymentModes from "./payment-modes";
 
 //const defaultCustomerInfo = {
 //    firstName: 'John',
@@ -169,10 +150,10 @@ const CheckoutForm = ({ countriesData }) => {
               id="summary-heading"
               className="text-lg font-medium text-gray-900"
             >
-              Order summary
+              Votre Commande
             </h2>
 
-            <ul
+            {/* <ul
               role="list"
               className="divide-y divide-gray-200 text-sm font-medium text-gray-900"
             >
@@ -196,9 +177,9 @@ const CheckoutForm = ({ countriesData }) => {
                   </p>
                 </li>
               ))}
-            </ul>
+            </ul> */}
 
-            <dl className="hidden space-y-6 border-t border-gray-200 pt-6 text-sm font-medium text-gray-900 lg:block">
+            {/* <dl className="hidden space-y-6 border-t border-gray-200 pt-6 text-sm font-medium text-gray-900 lg:block">
               <div className="flex items-center justify-between">
                 <dt className="text-gray-600">Subtotal</dt>
                 <dd>$320.00</dd>
@@ -218,9 +199,10 @@ const CheckoutForm = ({ countriesData }) => {
                 <dt className="text-base">Total</dt>
                 <dd className="text-base">$361.80</dd>
               </div>
-            </dl>
+            </dl> */}
+            <YourOrder cart={cart} />
 
-            <Popover className="fixed inset-x-0 bottom-0 flex flex-col-reverse text-sm font-medium text-gray-900 lg:hidden">
+            {/* <Popover className="fixed inset-x-0 bottom-0 flex flex-col-reverse text-sm font-medium text-gray-900 lg:hidden">
               <div className="relative z-10 border-t border-gray-200 bg-white px-4 sm:px-6">
                 <div className="mx-auto max-w-lg">
                   <Popover.Button className="flex w-full items-center py-6 font-medium">
@@ -278,7 +260,17 @@ const CheckoutForm = ({ countriesData }) => {
                   </Transition.Child>
                 </div>
               </Transition.Root>
-            </Popover>
+            </Popover> */}
+          </div>
+
+          <div className="mx-auto max-w-lg lg:max-w-none">
+            <h2
+              id="summary-heading"
+              className="text-lg font-medium text-gray-900"
+            >
+              Methode de Paiement
+            </h2>
+            {/* <PaymentModes input={input} handleOnChange={handleOnChange} /> */}
           </div>
         </section>
 
@@ -443,7 +435,7 @@ const CheckoutForm = ({ countriesData }) => {
                 Continue
               </button>
               <p className="mt-4 text-center text-sm text-gray-500 sm:mt-0 sm:text-left">
-                Vous ne seres facturez qu'à l'étape suivante.
+                Vous ne serez facturez qu'à l'étape suivante.
               </p>
             </div>
           </div>

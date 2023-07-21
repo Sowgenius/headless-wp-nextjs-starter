@@ -91,7 +91,7 @@ const CartItemsContainer = () => {
                   </div>
 
                   {/*Checkout*/}
-                  <Link href="/Checkout">
+                  <Link href="/checkout">
                     <button className="text-white duration-500  focus:ring-4 focus:text-white font-medium rounded-lg text-sm  text-center mb-2">
                       <span className=" rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50">
                         Commander

@@ -35,7 +35,7 @@ export const handleCreateAccount = (input, setInput, target) => {
  */
 
 import axios from "axios";
-import { WOO_STATES_ENDPOINT } from "../constants/endpoints";
+import { WOO_PM_ENDPOINT, WOO_STATES_ENDPOINT } from "../constants/endpoints";
 
 export const setStatesForCountry = async (
   target,
@@ -70,4 +70,25 @@ export const getStates = async (countryCode = "") => {
     params: { countryCode },
   });
   return data?.states ?? [];
+};
+
+// utils/fetchPaymentMethods.js
+// Create an Axios instance with the WooCommerce consumer key and secret as headers
+const axiosWithAuth = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_WORDPRESS_SITE_URL,
+  headers: {
+    Authorization: `Basic ${Buffer.from(
+      `${process.env.WC_CONSUMER_KEY}:${process.env.WC_CONSUMER_SECRET}`
+    ).toString("base64")}`,
+  },
+});
+
+export const fetchPaymentMethods = async () => {
+  try {
+    const { data } = await axiosWithAuth.get(WOO_PM_ENDPOINT);
+    return data ?? [];
+  } catch (error) {
+    console.error("Error fetching payment methods:", error);
+    return [];
+  }
 };
