@@ -8,7 +8,7 @@ const CountrySelection = ({ input, handleOnChange, countries, isShipping }) => {
   const inputId = `country-${isShipping ? "shipping" : "billing"}`;
 
   return (
-    <div className="mb-3">
+    <div className="">
       <label className="leading-7 text-sm text-gray-700" htmlFor={inputId}>
         Pays
         <Abbr required />

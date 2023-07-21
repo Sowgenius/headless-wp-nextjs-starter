@@ -18,7 +18,7 @@ const StateSelection = ({
   if (isFetchingStates) {
     // Show loading component.
     return (
-      <div className="mb-3">
+      <div className="">
         <label className="leading-7 text-sm text-gray-700">
           Ville/Zone
           <Abbr required />
@@ -42,7 +42,7 @@ const StateSelection = ({
   }
 
   return (
-    <div className="mb-3 woo-inputField-checkout">
+    <div className="woo-inputField-checkout">
       <label className="leading-7 text-sm text-gray-600" htmlFor={inputId}>
         Region/Ville
         <Abbr required />

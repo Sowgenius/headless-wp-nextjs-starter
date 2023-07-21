@@ -10,7 +10,8 @@ import {
 } from "../../utils/checkout";
 import CheckboxField from "./form-elements/checkbox-field";
 import YourOrder from "./your-order";
-//import PaymentModes from "./payment-modes";
+import PaymentModes from "./payment-modes";
+import ShippingOptions from "./shipping-options";
 
 //const defaultCustomerInfo = {
 //    firstName: 'John',
@@ -42,8 +43,8 @@ const defaultCustomerInfo = {
   error: null,
 };
 
-const CheckoutForm = ({ countriesData }) => {
-  //console.log("countriesData", countriesData);
+const CheckoutForm = ({ countriesData, paymentMethods }) => {
+  console.log("paymentMethods", { paymentMethods });
 
   const { billingCountries, shippingCountries } = countriesData || {};
   console.log("NewData", [billingCountries, shippingCountries]);
@@ -270,7 +271,22 @@ const CheckoutForm = ({ countriesData }) => {
             >
               Methode de Paiement
             </h2>
-            {/* <PaymentModes input={input} handleOnChange={handleOnChange} /> */}
+            <PaymentModes
+              input={input}
+              handleOnChange={handleOnChange}
+              paymentMethods={paymentMethods}
+            />
+          </div>
+
+          <div className="mx-auto max-w-lg lg:max-w-none">
+            <h2
+              id="summary-heading"
+              className="text-lg font-medium text-gray-900"
+            >
+              Methode de Livraison
+            </h2>
+
+            <ShippingOptions input={input} handleOnChange={handleOnChange} />
           </div>
         </section>
 

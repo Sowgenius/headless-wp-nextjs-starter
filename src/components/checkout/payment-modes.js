@@ -4,6 +4,10 @@ import fetchPaymentMethods from "../../utils/fetch-method-payments";
 
 const PaymentModes = ({ input, handleOnChange, paymentMethods }) => {
   const { errors, paymentMethod } = input || {};
+  const handleChange = (selectedValue) => {
+    // Call the handleOnChange function with the correct parameters
+    handleOnChange({ target: { name: "paymentMethod", value: selectedValue } });
+  };
 
   return (
     <>
@@ -12,7 +16,7 @@ const PaymentModes = ({ input, handleOnChange, paymentMethods }) => {
       </div>
       <div>
         <h3>Choisissez votre mode de paiement:</h3>
-        <RadioGroup value={paymentMethod} onChange={handleOnChange}>
+        <RadioGroup value={paymentMethod} onChange={handleChange}>
           <RadioGroup.Label className="sr-only">
             Methodes de Paiement
           </RadioGroup.Label>

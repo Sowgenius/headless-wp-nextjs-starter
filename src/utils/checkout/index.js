@@ -72,23 +72,3 @@ export const getStates = async (countryCode = "") => {
   return data?.states ?? [];
 };
 
-// utils/fetchPaymentMethods.js
-// Create an Axios instance with the WooCommerce consumer key and secret as headers
-const axiosWithAuth = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_WORDPRESS_SITE_URL,
-  headers: {
-    Authorization: `Basic ${Buffer.from(
-      `${process.env.WC_CONSUMER_KEY}:${process.env.WC_CONSUMER_SECRET}`
-    ).toString("base64")}`,
-  },
-});
-
-export const fetchPaymentMethods = async () => {
-  try {
-    const { data } = await axiosWithAuth.get(WOO_PM_ENDPOINT);
-    return data ?? [];
-  } catch (error) {
-    console.error("Error fetching payment methods:", error);
-    return [];
-  }
-};
