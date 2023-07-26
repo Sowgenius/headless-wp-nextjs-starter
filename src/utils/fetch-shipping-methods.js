@@ -6,19 +6,49 @@ const api = new WooCommerceRestApi({
   consumerSecret: process.env.WC_CONSUMER_SECRET,
   version: "wc/v3",
   queryStringAuth: true,
+  axiosConfig: {
+    headers: {
+      "Access-Control-Allow-Origin": "*", // Replace * with your allowed origin if possible
+      "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, OPTIONS",
+      "Access-Control-Allow-Headers":
+        "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    },
+  },
 });
 
 /**
- * Get Shipping Methods.
+ * Get Shipping Zones and Methods.
  *
  * @return {Promise<any>}
  */
-export const getShippingMethods = async () => {
+export const getShippingZonesAndMethods = async () => {
   try {
-    const response = await api.get("shipping_methods");
-    return response?.data ?? [];
+    const zonesResponse = await api.get("shipping/zones");
+    const zonesData = zonesResponse?.data ?? [];
+
+    // Fetch shipping methods for each zone
+    const shippingMethodsPromises = zonesData.map(async (zone) => {
+      try {
+        const methodsResponse = await api.get(
+          `shipping/zones/${zone.id}/methods`
+        );
+        const methodsData = methodsResponse?.data ?? [];
+        return { zone, methods: methodsData };
+      } catch (error) {
+        console.error(
+          `Error fetching shipping methods for zone ID ${zone.id}:`,
+          error
+        );
+        return { zone, methods: [] }; // Return an empty array if there's an error fetching methods
+      }
+    });
+
+    // Wait for all shipping methods to be fetched
+    const shippingZonesAndMethods = await Promise.all(shippingMethodsPromises);
+
+    return shippingZonesAndMethods;
   } catch (error) {
-    console.error("Error fetching shipping methods:", error);
+    console.error("Error fetching shipping zones:", error);
     return [];
   }
 };

@@ -1,6 +1,6 @@
 //import { Disclosure, Popover, Transition } from "@headlessui/react";
 //import { ChevronUpIcon, LockClosedIcon } from "@heroicons/react/24/outline";
-import { Fragment, useContext, useState } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import { AppContext } from "../context";
 import Address from "./user-adress";
 import {
@@ -12,6 +12,7 @@ import CheckboxField from "./form-elements/checkbox-field";
 import YourOrder from "./your-order";
 import PaymentModes from "./payment-modes";
 import ShippingOptions from "./shipping-options";
+import { getShippingZonesAndMethods } from "../../utils/fetch-shipping-methods";
 
 //const defaultCustomerInfo = {
 //    firstName: 'John',
@@ -70,6 +71,18 @@ const CheckoutForm = ({ countriesData, paymentMethods }) => {
   const [isFetchingBillingStates, setIsFetchingBillingStates] = useState(false);
   const [isOrderProcessing, setIsOrderProcessing] = useState(false);
   const [createOrderDate, setCreateOrderDate] = useState({});
+
+  const [shippingZonesAndMethods, setShippingZonesAndMethods] = useState([]);
+
+  // Fetch shipping zones and methods on component mount
+  useEffect(() => {
+    fetchShippingZonesAndMethods();
+  }, []);
+
+  const fetchShippingZonesAndMethods = async () => {
+    const shippingZonesAndMethodsData = await getShippingZonesAndMethods();
+    setShippingZonesAndMethods(shippingZonesAndMethodsData);
+  };
 
   const handleFormSubmit = () => {};
 
@@ -286,7 +299,11 @@ const CheckoutForm = ({ countriesData, paymentMethods }) => {
               Methode de Livraison
             </h2>
 
-            <ShippingOptions input={input} handleOnChange={handleOnChange} />
+            <ShippingOptions
+              input={input}
+              handleOnChange={handleShippingChange}
+              shippingZonesAndMethods={shippingZonesAndMethods}
+            />
           </div>
         </section>
 

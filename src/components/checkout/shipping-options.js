@@ -1,27 +1,44 @@
 import { useEffect, useState } from "react";
 import { RadioGroup } from "@headlessui/react";
 import Error from "./form-elements/error";
-import { getShippingMethods } from "../../utils/fetch-shipping-methods";
 
-const ShippingOptions = ({ input, handleOnChange }) => {
-  const { errors, shippingMethod } = input || {};
-
-  const [shippingMethods, setShippingMethods] = useState([]);
+const ShippingOptions = ({
+  input,
+  handleOnChange,
+  shippingZonesAndMethods,
+}) => {
+  const { errors, shippingZone, shippingMethod } = input || {};
   const [shippingCost, setShippingCost] = useState(0);
 
   useEffect(() => {
-    fetchShippingMethods();
-  }, []);
+    // Set the initial shipping cost based on the selected shipping method
+    calculateShippingCost();
+  }, [shippingZonesAndMethods, shippingMethod]);
 
-  const fetchShippingMethods = async () => {
-    const shippingMethodsData = await getShippingMethods();
-    setShippingMethods(shippingMethodsData);
-  };
+  const calculateShippingCost = () => {
+    if (
+      !shippingZonesAndMethods ||
+      shippingZonesAndMethods.length === 0 ||
+      !shippingMethod
+    ) {
+      // No shipping zones and methods available or no shipping method selected
+      setShippingCost(0);
+      return;
+    }
 
-  const handleShippingChange = (event) => {
-    // Update the shipping cost based on the selected shipping method
-    const selectedShippingMethod = shippingMethods.find(
-      (method) => method.id === event.target.value
+    // Find the selected shipping zone and method
+    const selectedShippingZone = shippingZonesAndMethods.find(
+      (zone) => zone.zone.id === shippingZone
+    );
+
+    if (!selectedShippingZone) {
+      // Selected shipping zone not found
+      setShippingCost(0);
+      return;
+    }
+
+    const selectedShippingMethod = selectedShippingZone.methods.find(
+      (method) => method.id === shippingMethod
     );
 
     if (selectedShippingMethod && selectedShippingMethod.settings) {
@@ -31,64 +48,42 @@ const ShippingOptions = ({ input, handleOnChange }) => {
       if (costType === "fixed") {
         setShippingCost(cost);
       } else if (costType === "class") {
-        // You may implement additional logic here based on the "class" cost type
-        // For example, you can calculate the shipping cost based on the order details
-        // and the shipping class.
-        // This will depend on your specific shipping setup in WooCommerce.
-        // For simplicity, we'll just set the shipping cost to 0 for the "class" type.
+        // Additional logic based on shipping class (if needed)
+        // For simplicity, we'll set the shipping cost to 0 for the "class" type.
         setShippingCost(0);
       }
     }
+  };
 
-    handleOnChange(event); // Pass the event to the parent component
+  const handleShippingChange = (event) => {
+    handleOnChange(event);
   };
 
   return (
-    <>
-      <div className="mt-3">
-        <Error errors={errors} fieldName={"shippingMethod"} />
-      </div>
-      <div>
-        <h3>Select Shipping Method:</h3>
-        <RadioGroup value={shippingMethod} onChange={handleShippingChange}>
-          <RadioGroup.Label className="sr-only">
-            Shipping Method
-          </RadioGroup.Label>
-          <div className="space-y-2">
-            {shippingMethods?.map((method) => (
-              <RadioGroup.Option key={method.id} value={method.id}>
-                {({ checked }) => (
-                  <div
-                    className={`border rounded p-2 ${
-                      checked ? "bg-indigo-200" : ""
-                    }`}
-                  >
-                    <RadioGroup.Label
-                      as="span"
-                      className={`font-bold ${
-                        checked ? "text-indigo-600" : ""
-                      }`}
-                    >
-                      {method.title}
-                    </RadioGroup.Label>
-                    <RadioGroup.Description
-                      as="p"
-                      className={`text-sm ${checked ? "text-indigo-700" : ""}`}
-                    >
-                      {/* Display additional information about the shipping method if needed */}
-                    </RadioGroup.Description>
-                  </div>
-                )}
-              </RadioGroup.Option>
-            ))}
-          </div>
-        </RadioGroup>
-      </div>
-      <div>
-        {/* Display the calculated shipping cost */}
-        <p>Shipping Cost: ${shippingCost.toFixed(2)}</p>
-      </div>
-    </>
+    <div>
+      {/* Render the shipping options for the selected shipping zone */}
+      {shippingZonesAndMethods.map((zone) => (
+        <div key={zone.zone.id}>
+          {zone.zone.id === shippingZone && (
+            <div>
+              {/* Display the available shipping methods for the selected zone */}
+              <RadioGroup
+                value={shippingMethod}
+                onChange={handleShippingChange}
+              >
+                {zone.methods.map((method) => (
+                  <RadioGroup.Option key={method.id} value={method.id}>
+                    {method.title} - {method.method_title}
+                  </RadioGroup.Option>
+                ))}
+              </RadioGroup>
+              {/* Display the shipping cost for the selected method */}
+              <p>Shipping Cost: {shippingCost}</p>
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
   );
 };
 

@@ -18,7 +18,7 @@ const PaymentModes = ({ input, handleOnChange, paymentMethods }) => {
         <h3>Choisissez votre mode de paiement:</h3>
         <RadioGroup value={paymentMethod} onChange={handleChange}>
           <RadioGroup.Label className="sr-only">
-            Methodes de Paiement
+            Modes de Paiement
           </RadioGroup.Label>
           <div className="space-y-2">
             {paymentMethods?.map((method) => (
