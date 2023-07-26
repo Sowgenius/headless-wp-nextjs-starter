@@ -6,14 +6,6 @@ const api = new WooCommerceRestApi({
   consumerSecret: process.env.WC_CONSUMER_SECRET,
   version: "wc/v3",
   queryStringAuth: true,
-  axiosConfig: {
-    headers: {
-      "Access-Control-Allow-Origin": "*", // Replace * with your allowed origin if possible
-      "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, OPTIONS",
-      "Access-Control-Allow-Headers":
-        "Origin, X-Requested-With, Content-Type, Accept, Authorization",
-    },
-  },
 });
 
 /**
