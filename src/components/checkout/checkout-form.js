@@ -272,66 +272,6 @@ const CheckoutForm = ({ countriesData, paymentMethods }) => {
               </div>
             </dl> */}
             <YourOrder cart={cart} />
-
-            {/* <Popover className="fixed inset-x-0 bottom-0 flex flex-col-reverse text-sm font-medium text-gray-900 lg:hidden">
-              <div className="relative z-10 border-t border-gray-200 bg-white px-4 sm:px-6">
-                <div className="mx-auto max-w-lg">
-                  <Popover.Button className="flex w-full items-center py-6 font-medium">
-                    <span className="mr-auto text-base">Total</span>
-                    <span className="mr-2 text-base">$361.80</span>
-                    <ChevronUpIcon
-                      className="h-5 w-5 text-gray-500"
-                      aria-hidden="true"
-                    />
-                  </Popover.Button>
-                </div>
-              </div>
-
-              <Transition.Root as={Fragment}>
-                <div>
-                  <Transition.Child
-                    as={Fragment}
-                    enter="transition-opacity ease-linear duration-300"
-                    enterFrom="opacity-0"
-                    enterTo="opacity-100"
-                    leave="transition-opacity ease-linear duration-300"
-                    leaveFrom="opacity-100"
-                    leaveTo="opacity-0"
-                  >
-                    <Popover.Overlay className="fixed inset-0 bg-black bg-opacity-25" />
-                  </Transition.Child>
-
-                  <Transition.Child
-                    as={Fragment}
-                    enter="transition ease-in-out duration-300 transform"
-                    enterFrom="translate-y-full"
-                    enterTo="translate-y-0"
-                    leave="transition ease-in-out duration-300 transform"
-                    leaveFrom="translate-y-0"
-                    leaveTo="translate-y-full"
-                  >
-                    <Popover.Panel className="relative bg-white px-4 py-6 sm:px-6">
-                      <dl className="mx-auto max-w-lg space-y-6">
-                        <div className="flex items-center justify-between">
-                          <dt className="text-gray-600">Subtotal</dt>
-                          <dd>$320.00</dd>
-                        </div>
-
-                        <div className="flex items-center justify-between">
-                          <dt className="text-gray-600">Shipping</dt>
-                          <dd>$15.00</dd>
-                        </div>
-
-                        <div className="flex items-center justify-between">
-                          <dt className="text-gray-600">Taxes</dt>
-                          <dd>$26.80</dd>
-                        </div>
-                      </dl>
-                    </Popover.Panel>
-                  </Transition.Child>
-                </div>
-              </Transition.Root>
-            </Popover> */}
           </div>
 
           <div className="mx-auto max-w-lg lg:max-w-none">
@@ -519,11 +459,13 @@ const CheckoutForm = ({ countriesData, paymentMethods }) => {
 
             <div className="mt-10 border-t border-gray-200 pt-6 sm:flex sm:items-center sm:justify-between">
               <button
-                disabled={isOrderProcessing}
+                //disabled={isOrderProcessing}
                 type="submit"
-                className={cx(
-                  "w-full rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50 sm:order-last sm:ml-6 sm:w-auto", {'opacity-50':  isOrderProcessing }
-                )}
+                className="w-full rounded-md border border-transparent 
+                bg-indigo-600 py-2 px-4 text-sm font-medium 
+                text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2
+                 focus:ring-indigo-500 focus:ring-offset-2 
+                 focus:ring-offset-gray-50 sm:order-last sm:ml-6 sm:w-auto"
               >
                 Continue
               </button>
