@@ -69,6 +69,11 @@ export const getStates = async (countryCode = "") => {
   const { data } = await axios.get(WOO_STATES_ENDPOINT, {
     params: { countryCode },
   });
+
+  const myData = data?.states;
+
+  console.log("StateData: ", myData);
+
   return data?.states ?? [];
 };
 

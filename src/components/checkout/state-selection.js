@@ -64,6 +64,7 @@ const StateSelection = ({
             <option
               key={state?.stateCode ?? index}
               value={state?.stateName ?? ""}
+              data-statecode={"SN:" + state?.stateCode}
             >
               {state?.stateName}
             </option>

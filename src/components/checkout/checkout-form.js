@@ -14,6 +14,7 @@ import PaymentModes from "./payment-modes";
 import ShippingOptions from "./shipping-options";
 import { getShippingZonesAndMethods } from "../../utils/fetch-shipping-methods";
 
+
 //const defaultCustomerInfo = {
 //    firstName: 'John',
 //    lastName: 'Doe',
@@ -60,6 +61,11 @@ const CheckoutForm = ({ countriesData, paymentMethods }) => {
     orderNotes: "",
     billingDifferentThanShipping: false,
     paymentMethod: "cod",
+    shipping_total: "",
+    shipping_lines: [],
+    coupon_lines: [],
+    shippingMethod: "",
+    shippingState: "",
   };
   const [cart, setCart] = useContext(AppContext);
   const [input, setInput] = useState(initialState);
@@ -73,6 +79,9 @@ const CheckoutForm = ({ countriesData, paymentMethods }) => {
   const [createOrderDate, setCreateOrderDate] = useState({});
 
   const [shippingZonesAndMethods, setShippingZonesAndMethods] = useState([]);
+  const [shippingMethods, setShippingMethods] = useState([]);
+  const [shippingTotal, setShippingTotal] = useState("");
+  const [shippingLines, setShippingLines] = useState([]);
 
   // Fetch shipping zones and methods on component mount
   useEffect(() => {
@@ -80,7 +89,11 @@ const CheckoutForm = ({ countriesData, paymentMethods }) => {
   }, []);
 
   const fetchShippingZonesAndMethods = async () => {
+    // Get the shipping zones and methods from the API
     const shippingZonesAndMethodsData = await getShippingZonesAndMethods();
+    console.log("shippingZonesAndMethodsData", shippingZonesAndMethodsData);
+
+    // Set the shipping zones and methods in the state
     setShippingZonesAndMethods(shippingZonesAndMethodsData);
   };
 
@@ -102,6 +115,14 @@ const CheckoutForm = ({ countriesData, paymentMethods }) => {
       if (isShipping) {
         //handle Shipping
         await handleShippingChange(target);
+        const selectedShippingZone = shippingZonesAndMethods.find((item) =>
+          item.locations.some((location) => location.code === target.value)
+        );
+        if (selectedShippingZone) {
+          setShippingMethods(selectedShippingZone.methods);
+        } else {
+          setShippingMethods([]);
+        }
       } else {
         //handle Billing
         await handleBillingChange(target);
@@ -112,6 +133,21 @@ const CheckoutForm = ({ countriesData, paymentMethods }) => {
     }
 
     console.log("input", input);
+
+    // Extract the selected state code from the dropdown menu and set it in the state
+    if (target.name === "state") {
+      const selectedStateOption = target.options[target.selectedIndex];
+
+      console.log("selectedStateOption", selectedStateOption);
+
+      const selectedStateCode =
+        selectedStateOption.getAttribute("data-statecode");
+      console.log("selectedStateCode", selectedStateCode);
+      setInput((prevInput) => ({
+        ...prevInput,
+        shippingState: selectedStateCode,
+      }));
+    }
   };
 
   const handleShippingChange = async (target) => {
@@ -133,11 +169,32 @@ const CheckoutForm = ({ countriesData, paymentMethods }) => {
       billing: { ...input?.billing, [target.name]: target.value },
     };
     setInput(newState);
+    //console.log("newState", newState);
     await setStatesForCountry(
       target,
       setTheBillingStates,
       setIsFetchingBillingStates
     );
+  };
+
+  const handleShippingMethodChange = (selectedShippingMethod) => {
+    console.log("Selected Shipping Method:", selectedShippingMethod);
+
+    const { method_id, method_title, total } = selectedShippingMethod;
+
+    const shippingLine = {
+      method_id: method_id,
+      method_title: method_title,
+      total: total ? total : 0, // Set the total to 0 if cost is empty
+    };
+
+    console.log("Shipping Line:", shippingLine);
+
+    setInput((prevInput) => ({
+      ...prevInput,
+      shipping_lines: [shippingLine], // Set the selected shipping method to shipping_lines as an array
+      shipping_total: total ? total : 0,
+    }));
   };
 
   return (
@@ -300,9 +357,9 @@ const CheckoutForm = ({ countriesData, paymentMethods }) => {
             </h2>
 
             <ShippingOptions
-              input={input}
-              handleOnChange={handleShippingChange}
               shippingZonesAndMethods={shippingZonesAndMethods}
+              selectedStateCode={input.shippingState} // Pass the selected state code to ShippingOptions
+              onShippingMethodChange={handleShippingMethodChange} // Pass the callback to handle shipping method change
             />
           </div>
         </section>
@@ -462,8 +519,11 @@ const CheckoutForm = ({ countriesData, paymentMethods }) => {
 
             <div className="mt-10 border-t border-gray-200 pt-6 sm:flex sm:items-center sm:justify-between">
               <button
+                disabled={isOrderProcessing}
                 type="submit"
-                className="w-full rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50 sm:order-last sm:ml-6 sm:w-auto"
+                className={cx(
+                  "w-full rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50 sm:order-last sm:ml-6 sm:w-auto", {'opacity-50':  isOrderProcessing }
+                )}
               >
                 Continue
               </button>

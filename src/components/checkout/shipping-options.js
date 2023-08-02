@@ -1,88 +1,109 @@
-import { useEffect, useState } from "react";
 import { RadioGroup } from "@headlessui/react";
+import { useState, useEffect } from "react";
 import Error from "./form-elements/error";
+import { getShippingZonesAndMethods } from "../../utils/fetch-shipping-methods";
 
 const ShippingOptions = ({
-  input,
-  handleOnChange,
   shippingZonesAndMethods,
+  selectedStateCode,
+  onShippingMethodChange,
 }) => {
-  const { errors, shippingZone, shippingMethod } = input || {};
-  const [shippingCost, setShippingCost] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [shippingMethods, setShippingMethods] = useState([]);
+  const [selectedShippingMethod, setSelectedShippingMethod] = useState(null);
 
   useEffect(() => {
-    // Set the initial shipping cost based on the selected shipping method
-    calculateShippingCost();
-  }, [shippingZonesAndMethods, shippingMethod]);
+    setLoading(true);
+    // Simulate API call to fetch shipping methods based on the selected state code
+    setTimeout(() => {
+      const selectedShippingZone = shippingZonesAndMethods.find((zone) =>
+        zone.locations.some((location) => location.code === selectedStateCode)
+      );
 
-  const calculateShippingCost = () => {
-    if (
-      !shippingZonesAndMethods ||
-      shippingZonesAndMethods.length === 0 ||
-      !shippingMethod
-    ) {
-      // No shipping zones and methods available or no shipping method selected
-      setShippingCost(0);
-      return;
-    }
+      setShippingMethods(selectedShippingZone?.methods || []);
+      setLoading(false);
+    }, 1000); // Adjust the time as per your requirement or replace it with actual API call
+  }, [shippingZonesAndMethods, selectedStateCode]);
 
-    // Find the selected shipping zone and method
-    const selectedShippingZone = shippingZonesAndMethods.find(
-      (zone) => zone.zone.id === shippingZone
+  const handleChange = (selectedValue) => {
+    console.log("Selected Value:", selectedValue);
+    const selectedMethod = shippingMethods.find(
+      (method) => method.id === selectedValue
     );
+    console.log("Selected Method:", selectedMethod);
+    if (selectedMethod) {
+      const { title, id, settings } = selectedMethod;
+      const total =
+        settings.cost && settings.cost.value ? settings.cost.value : 0;
 
-    if (!selectedShippingZone) {
-      // Selected shipping zone not found
-      setShippingCost(0);
-      return;
+      //console.log("Selected Method-title:", title, "id", id, "total", total);
+
+      setSelectedShippingMethod(title, id, total);
+      const shippingLine = {
+        method_title: title,
+        method_id: id,
+        total: total,
+      };
+
+      onShippingMethodChange(shippingLine); // Pass the selected method to the parent component
     }
-
-    const selectedShippingMethod = selectedShippingZone.methods.find(
-      (method) => method.id === shippingMethod
-    );
-
-    if (selectedShippingMethod && selectedShippingMethod.settings) {
-      const costType = selectedShippingMethod.settings.cost_type;
-      const cost = parseFloat(selectedShippingMethod.settings.cost);
-
-      if (costType === "fixed") {
-        setShippingCost(cost);
-      } else if (costType === "class") {
-        // Additional logic based on shipping class (if needed)
-        // For simplicity, we'll set the shipping cost to 0 for the "class" type.
-        setShippingCost(0);
-      }
-    }
-  };
-
-  const handleShippingChange = (event) => {
-    handleOnChange(event);
   };
 
   return (
     <div>
-      {/* Render the shipping options for the selected shipping zone */}
-      {shippingZonesAndMethods.map((zone) => (
-        <div key={zone.zone.id}>
-          {zone.zone.id === shippingZone && (
-            <div>
-              {/* Display the available shipping methods for the selected zone */}
-              <RadioGroup
-                value={shippingMethod}
-                onChange={handleShippingChange}
-              >
-                {zone.methods.map((method) => (
+      {loading ? (
+        <p>Loading shipping methods...</p>
+      ) : (
+        <div>
+          <div className="mt-3">
+            <Error
+              errors={shippingMethods.length === 0}
+              fieldName="shippingMethod"
+            />
+          </div>
+          <div>
+            <h3>Choisissez votre mode de livraison:</h3>
+            <RadioGroup
+              value={selectedShippingMethod?.id}
+              onChange={handleChange}
+            >
+              <RadioGroup.Label className="sr-only">
+                Modes de Livraison
+              </RadioGroup.Label>
+              <div className="space-y-2">
+                {shippingMethods.map((method) => (
                   <RadioGroup.Option key={method.id} value={method.id}>
-                    {method.title} - {method.method_title}
+                    {({ checked }) => (
+                      <div
+                        className={`border rounded p-2 ${
+                          checked ? "bg-indigo-200" : ""
+                        }`}
+                      >
+                        <RadioGroup.Label
+                          as="span"
+                          className={`font-bold ${
+                            checked ? "text-indigo-600" : ""
+                          }`}
+                        >
+                          {method.title}
+                        </RadioGroup.Label>
+                        <RadioGroup.Description
+                          as="p"
+                          className={`text-sm ${
+                            checked ? "text-indigo-700" : ""
+                          }`}
+                        >
+                          {method.settings?.cost?.value || 0}
+                        </RadioGroup.Description>
+                      </div>
+                    )}
                   </RadioGroup.Option>
                 ))}
-              </RadioGroup>
-              {/* Display the shipping cost for the selected method */}
-              <p>Shipping Cost: {shippingCost}</p>
-            </div>
-          )}
+              </div>
+            </RadioGroup>
+          </div>
         </div>
-      ))}
+      )}
     </div>
   );
 };
